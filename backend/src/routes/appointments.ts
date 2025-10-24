@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { getAllAppointments, createAppointment, getAppointmentById, updateAppointment, deleteAppointment } from "../services/appointmentService";
 import { Appointment } from "../models/types/Apointments";
-import { error } from "console";
 
 
 const router = Router();

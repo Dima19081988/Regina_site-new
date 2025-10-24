@@ -1,17 +1,15 @@
-import { QueryResult } from "pg";
 import { db } from "../config/db";
 import { Appointment } from "../models/types/Apointments";
 
 export const getAllAppointments = async () : Promise<Appointment[]> => {
     const result = await db.query('SELECT * FROM appointments ORDER BY appointment_time ASC');
-    return result.rows
+    return result.rows;
 };
 
 export const createAppointment = async (
     data: Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>
 ) : Promise<Appointment> => {
     const { client_name, service, appointment_time, price } = data;
-
     const result = await db.query(
         `INSERT INTO appointments (client_name, service, appointment_time, price)
         VALUES ($1, $2, $3, $4)
@@ -29,16 +27,55 @@ export const getAppointmentById = async (id: number) : Promise<Appointment | nul
 
 export const updateAppointment = async (
     id: number,
-    data: Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>
+    data: Partial<Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price' | 'status'>>
 ) : Promise<Appointment | null> => {
-    const { client_name, service, appointment_time, price } = data;
-    const result = await db.query(
-        `UPDATE appointments
-        SET client_name = $1, service = $2, appointment_time = $3, price = $4
-        WHERE id = $5
-        RETURNING *`,
-        [client_name, service, appointment_time, price, id]
-    );
+    const fields: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
+
+    if (data.client_name != undefined) {
+        fields.push(`client_name = $${paramIndex}`);
+        values.push(data.client_name);
+        paramIndex ++;
+    }
+
+    if (data.service != undefined) {
+        fields.push(`service = $${paramIndex}`);
+        values.push(data.service);
+        paramIndex ++;
+    }
+
+    if (data.appointment_time != undefined) {
+        fields.push(`appointment_time = $${paramIndex}`);
+        values.push(data.appointment_time);
+        paramIndex ++;
+    }
+
+    if (data.price != undefined) {
+        fields.push(`price = $${paramIndex}`);
+        values.push(data.price);
+        paramIndex ++;
+    }
+
+    if (data.status != undefined) {
+        fields.push(`status = $${paramIndex}`);
+        values.push(data.status);
+        paramIndex ++;
+    }
+
+    if (fields.length === 0) {
+        throw new Error('Нет полей для update Appointment');
+    }
+
+    values.push(id);
+    const queryText = `
+        UPDATE appointments
+        SET ${fields.join(', ')}
+        WHERE id = $${paramIndex}
+        RETURNING *
+    `;
+
+    const result = await db.query(queryText, values);
     return result.rows[0] || null;
 };
 
