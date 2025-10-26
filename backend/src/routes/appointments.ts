@@ -2,7 +2,6 @@ import { Router } from "express";
 import { getAllAppointments, createAppointment, getAppointmentById, updateAppointment, deleteAppointment } from "../services/appointmentService";
 import { Appointment } from "../models/types/Apointments";
 
-
 const router = Router();
 
 router.get('/', async(req, res) => {
@@ -34,13 +33,13 @@ router.get('/:id', async(req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
-        return res.status(400).json({ error: 'id должен быть числом' });
+        return res.status(400).json({ error: 'ID должен быть числом' });
     }
 
     try {
         const appointment = await getAppointmentById(appointmentId);
         if (!appointment) {
-            return res.status(404).json({ error: 'Запись по id не найдена' });
+            return res.status(404).json({ error: 'Запись по ID не найдена' });
         }
         res.json(appointment);
     } catch (err) {
@@ -53,13 +52,13 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
-        return res.status(400).json({ error: 'id должен быть числом' });
+        return res.status(400).json({ error: 'ID должен быть числом' });
     }
 
     try {
         const appointment = await updateAppointment(appointmentId, req.body);
         if(!appointment) {
-            return res.status(404).json({ error: 'Запись по id не найдена' });
+            return res.status(404).json({ error: 'Запись по ID не найдена' });
         }
         res.json(appointment);
     } catch (err) {
@@ -72,7 +71,7 @@ router.delete('/:id', async(req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
-        return res.status(400).json({ error: 'id должен быть числом' });
+        return res.status(400).json({ error: 'ID должен быть числом' });
     }
 
     try {
@@ -82,7 +81,7 @@ router.delete('/:id', async(req, res) => {
         }
         res.status(204).send();
     } catch (err) {
-        console.error('Ошибка при удалении записи:', err);
+        console.error('Ошибка при удалении записи: ', err);
         res.status(500).json({ error: 'Не удалось удалить запись' });
     }
 });

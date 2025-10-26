@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
+import portfolioRouter from './routes/portfolio.js';
 
 dotenv.config();
 
@@ -15,7 +16,8 @@ app.use(express.json());
 
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
-console.log('✅ Appointments router connected');
+app.use('/api/portfolio', portfolioRouter);
+console.log('✅ Routers connected: appointments, notes, portfolio');
 
 app.get('/', (req, res) => {
   res.json({ message: '✅ Backend is running!' });

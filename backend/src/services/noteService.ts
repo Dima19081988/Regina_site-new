@@ -51,12 +51,11 @@ export const updateNote = async (
 
     values.push(id);
 
-    const queryText = `
-        UPDATE notes
+    const queryText = 
+        `UPDATE notes
         SET ${fields.join(', ')}
         WHERE id = $${paramIndex}
-        RETURNING *
-    `;
+        RETURNING *`;
 
     const result = await db.query(queryText, values);
     return result.rows[0] || null;

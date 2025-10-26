@@ -68,12 +68,11 @@ export const updateAppointment = async (
     }
 
     values.push(id);
-    const queryText = `
-        UPDATE appointments
+    const queryText = 
+        `UPDATE appointments
         SET ${fields.join(', ')}
         WHERE id = $${paramIndex}
-        RETURNING *
-    `;
+        RETURNING *`;
 
     const result = await db.query(queryText, values);
     return result.rows[0] || null;
