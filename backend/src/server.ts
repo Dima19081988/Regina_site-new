@@ -4,7 +4,7 @@ import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
 import portfolioRouter from './routes/portfolio.js';
-import uploadRouter from './routes/upload.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
-app.use('/api/upload', uploadRouter)
+// app.use('/api/upload', uploadRouter)
 console.log('✅ Routers connected');
 
 app.get('/', (req, res) => {

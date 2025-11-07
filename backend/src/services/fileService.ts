@@ -1,8 +1,7 @@
-import { PutObjectCommand, GetObjectAclCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import { s3Client } from "../config/s3Client";
 import path from "path";
-import { send } from "process";
 
 const BUCKET_NAME = process.env.S3_BUCKET!;
 
@@ -65,5 +64,19 @@ export const uploadFileToS3 = async (
     await s3Client.send(command);
 //публичная ссылка
     return `https://${BUCKET_NAME}.storage.yandexcloud.net/${key}`;
+};
+
+export const deleteFileFromS3 = async (key: string) : Promise<void> => {
+    if (!key) {
+        throw new Error('Ключ файла не может быть пустым')
+    }
+
+    const command = new DeleteObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+    });
+
+    await s3Client.send(command);
+    console.log(`✅ Файл удалён из облака: ${key}`);
 };
 

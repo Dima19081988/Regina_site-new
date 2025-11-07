@@ -1,5 +1,7 @@
 import { db } from "../config/db";
 import { Portfolio } from "../models/types/Portfolio";
+import { deleteFileFromS3 } from "./fileService";
+import { extractKeyFromUrl } from "../utils/s3";
 
 export const getAllPortfolioImages = async () : Promise<Portfolio[]> => {
     const result = await db.query('SELECT * FROM portfolio ORDER BY created_at DESC');
@@ -75,6 +77,21 @@ export const updatePortfolio = async(
 };
 
 export const deletePortfolio = async(id: number) : Promise<boolean> => {
+    const existing = await getPortfolioById(id);
+    if (!existing) {
+        return false;
+    }
+
     const result = await db.query('DELETE FROM portfolio WHERE id = $1', [id]);
-    return (result.rowCount || 0) > 0;
+    const deleted = (result.rowCount || 0) > 0;
+
+    if (deleted && existing.image_url) {
+        try {
+            const key = extractKeyFromUrl(existing.image_url, process.env.S3_BUCKET!.trim());
+            await deleteFileFromS3(key);
+        } catch (err) {
+            console.error('⚠️ Не удалось удалить файл из облака:', err);
+        }
+    }
+    return deleted;
 };
