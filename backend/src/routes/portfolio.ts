@@ -1,13 +1,17 @@
 import { Router } from "express";
+import multer from "multer";
 import { getAllPortfolioImages, 
         getPortfolioById, 
         getPortfolioByCategory, 
         createPortfolio, 
         updatePortfolio, 
         deletePortfolio } from "../services/portfolioService";
+import { uploadFileToS3 } from "../services/fileService";
 import { Portfolio } from "../models/types/Portfolio";
 
+
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', async (req, res) => {
     const { category } = req.query;
@@ -20,24 +24,40 @@ router.get('/', async (req, res) => {
             portfolio = await getAllPortfolioImages();
         }
         res.json(portfolio);
-    } catch (err) {
+    } catch (err: any) {
         console.error('Ошибка при получении портфолио: ', err);
-        res.status(500).json({ error: 'Не удалось загрузить портфолио' });
+        res.status(500).json({ error: err.message || 'Не удалось загрузить портфолио' });
     }
 });
 
-router.post('/', async (req, res) => {
-    const { title, description, image_url, category } = req.body;
-    if (!title || !image_url || !category) {
-        return res.status(400).json({ error: 'Поля title, image_url, category обязательны для заполнения' });
-    }
-
+router.post('/', upload.single('image'), async (req, res) => {
     try {
-        const portfolio: Portfolio = await createPortfolio({title, description, image_url, category});
-        res.json(portfolio);
-    } catch (err) {
-        console.error('Ошибка при создании портфолио: ', err);
-        res.status(500).json({ error: 'Не удалось создать портфолио' });
+        if (!req.file) {
+            return res.status(400).json({ error: 'Файл обязателен, используйте поле "file"' });
+        }
+
+        const { title, description, category } = req.body;
+        if (!title || !category) {
+            return res.status(400).json({ error: 'Поля "title" и "category" обязательны' });
+        }
+
+        const uploadUrl = await uploadFileToS3(
+            req.file.buffer,
+            req.file.originalname,
+            'portfolio/images'
+        );
+
+        const portfolioEntry = await createPortfolio({
+            title,
+            description: description || null,
+            image_url: uploadUrl,
+            category,
+        });
+        
+        res.status(201).json(portfolioEntry);
+    } catch (err: any) {
+        console.error('Ошибка при создании портфолио:', err);
+        res.status(500).json({ error: err.message || 'Не удалось создать запись портфолио' });
     }
 });
 
@@ -55,9 +75,9 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Портфолио по ID не найдено' });
         }
         res.json(portfolio);
-    } catch (err) {
+    } catch (err: any) {
         console.error('Ошибка при получении портфолио по ID: ', err);
-        res.status(500).json({ error: 'Не удалось получить портфолио по ID' });
+        res.status(500).json({ error: err.message || 'Не удалось получить портфолио по ID' });
     }
 });
 
@@ -75,9 +95,9 @@ router.put('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Портфолио по ID не найдено' });
         }
         res.json(portfolio)
-    } catch (err) {
+    } catch (err: any) {
         console.error('Ошибка при обновлении портфолио: ', err);
-        res.status(500).json({ error: 'Не удалось обновить портфолио' });
+        res.status(500).json({ error: err.message || 'Не удалось обновить портфолио' });
     }
 });
 
@@ -95,9 +115,9 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Портфолио по ID не найдено' });
         }
         res.status(204).send();
-    } catch (err) {
+    } catch (err: any) {
         console.error('Ошибка при удалении портфолио: ', err);
-        res.status(500).json({ error: 'Не удалось удалить портфолио' });
+        res.status(500).json({ error: err.message || 'Не удалось удалить портфолио' });
     }
 });
 

@@ -13,7 +13,8 @@ const ALLOWED_EXTENSIONS = new Set([
 
 const ALLOWED_FOLDERS = new Set([
     'portfolio/images',
-    'portfolio/documents'
+    'portfolio/documents',
+    'files'
 ]);
 //функция определения расширения
 const getMimeType = (ext: string): string => {
@@ -34,7 +35,7 @@ const getMimeType = (ext: string): string => {
 export const uploadFileToS3 = async (
     fileBuffer: Buffer,
     originalName: string,
-    folder: 'portfolio/images' | 'portfolio/documents' = 'portfolio/images'
+    folder: string = 'portfolio/images'
 ) : Promise<string> => {
 //проверка расширения
     const fileExtension = path.extname(originalName).toLowerCase();
@@ -43,7 +44,7 @@ export const uploadFileToS3 = async (
     }
 //проверка папки
     if(!ALLOWED_FOLDERS.has(folder)) {
-        throw new Error(`Недопустимая папка ${folder}`);
+        throw new Error(`Недопустимая папка ${folder}. Разрешены: ${[...ALLOWED_FOLDERS].join(', ')}`);
     }
 //генерация уникального имени
     const uniqueFileName = `${uuidv4()}${fileExtension}`;
