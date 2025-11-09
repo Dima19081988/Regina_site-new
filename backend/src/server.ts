@@ -16,6 +16,16 @@ app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
 // app.use('/api/upload', uploadRouter)
+app.use((err: any, req: any, res: any, next: any) => {
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({ error: 'Файл слишком большой. Максимум — 5 МБ.' });
+  }
+  if (err.message && err.message.includes('Разрешены только')) {
+    return res.status(400).json({ error: err.message });
+  }
+  console.error('Multer error:', err);
+  res.status(500).json({ error: 'Ошибка при загрузке файла' });
+})
 console.log('✅ Routers connected');
 
 app.get('/', (req, res) => {

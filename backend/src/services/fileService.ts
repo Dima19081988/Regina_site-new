@@ -2,8 +2,11 @@ import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import { s3Client } from "../config/s3Client";
 import path from "path";
+import { db } from "../config/db";
+import crypto from 'crypto';
 
-const BUCKET_NAME = process.env.S3_BUCKET!;
+
+const BUCKET_NAME = process.env.S3_BUCKET?.trim()!;
 
 const ALLOWED_EXTENSIONS = new Set([
     '.jpg', '.jpeg', '.png', '.webp', '.gif',
@@ -30,12 +33,21 @@ const getMimeType = (ext: string): string => {
         default: return 'application/octet-stream'
     }
 };
+
+const getFileHash = (buffer: Buffer): string => {
+  return crypto.createHash('sha256').update(buffer).digest('hex');
+};
+
 //функция загрузки
 export const uploadFileToS3 = async (
     fileBuffer: Buffer,
     originalName: string,
     folder: string = 'portfolio/images'
 ) : Promise<string> => {
+//проверка originalName на пустоту
+    if (!originalName || typeof originalName !== 'string') {
+        throw new Error('Имя файла обязательно');
+    }
 //проверка расширения
     const fileExtension = path.extname(originalName).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(fileExtension)) {
@@ -45,6 +57,15 @@ export const uploadFileToS3 = async (
     if(!ALLOWED_FOLDERS.has(folder)) {
         throw new Error(`Недопустимая папка ${folder}. Разрешены: ${[...ALLOWED_FOLDERS].join(', ')}`);
     }
+    
+
+//Проверка, был ли такой файл уже загружен
+    const fileHash = getFileHash(fileBuffer);
+    const existingHash = await db.query('SELECT 1 FROM file_hashes WHERE hash = $1', [fileHash]);
+    if (existingHash.rows.length > 0) {
+        throw new Error('Файл с таким содержимым уже был загружен');
+    }
+
 //генерация уникального имени
     const uniqueFileName = `${uuidv4()}${fileExtension}`;
     const key = `${folder}/${uniqueFileName}`;
@@ -62,6 +83,13 @@ export const uploadFileToS3 = async (
     });
 
     await s3Client.send(command);
+
+//Сохранение хеша в базе, чтобы избежать будущих дублей
+    await db.query(
+    'INSERT INTO file_hashes (hash) VALUES ($1) ON CONFLICT (hash) DO NOTHING',
+    [fileHash]
+    );
+
 //публичная ссылка
     return `https://${BUCKET_NAME}.storage.yandexcloud.net/${key}`;
 };

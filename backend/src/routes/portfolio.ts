@@ -11,7 +11,19 @@ import { Portfolio } from "../models/types/Portfolio";
 
 
 const router = Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024,
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!allowedMimeTypes.includes(file.mimetype)) {
+            return cb(new Error('Разрешены только изображения: JPG, PNG, WebP, GIF'));
+        }
+        cb(null, true);
+    }
+});
 
 router.get('/', async (req, res) => {
     const { category } = req.query;
@@ -57,6 +69,11 @@ router.post('/', upload.single('image'), async (req, res) => {
         res.status(201).json(portfolioEntry);
     } catch (err: any) {
         console.error('Ошибка при создании портфолио:', err);
+
+        if (err.message === 'Файл с таким содержимым уже был загружен') {
+            return res.status(400).json({ error: err.message });
+        }
+        
         res.status(500).json({ error: err.message || 'Не удалось создать запись портфолио' });
     }
 });
