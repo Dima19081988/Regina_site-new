@@ -4,6 +4,7 @@ import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
 import portfolioRouter from './routes/portfolio.js';
+import filesRouter from './routes/files.js';
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
+app.use('/api/files', filesRouter);
 // app.use('/api/upload', uploadRouter)
 app.use((err: any, req: any, res: any, next: any) => {
   if (err.code === 'LIMIT_FILE_SIZE') {
@@ -26,7 +28,7 @@ app.use((err: any, req: any, res: any, next: any) => {
   console.error('Multer error:', err);
   res.status(500).json({ error: 'Ошибка при загрузке файла' });
 })
-console.log('✅ Routers connected');
+console.log('✅ Routers connected: appointments, notes, portfolio, files');
 
 app.get('/', (req, res) => {
   res.json({ message: '✅ Backend is running!' });

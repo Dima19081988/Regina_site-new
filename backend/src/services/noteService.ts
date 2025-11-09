@@ -8,7 +8,7 @@ export const getAllNotes = async () : Promise<Note[]> => {
 
 export const createNote = async (
     data: Pick<Note, 'title' | 'content' >
-): Promise<Note> => {
+) : Promise<Note> => {
     const { title, content } = data;
     const result = await db.query(
         `INSERT INTO notes (title, content)
@@ -20,7 +20,7 @@ export const createNote = async (
     return result.rows[0];
 };
 
-export const getNoteById = async (id: number): Promise<Note | null> => {
+export const getNoteById = async (id: number) : Promise<Note | null> => {
     const result = await db.query('SELECT * FROM notes WHERE id = $1', [id]);
     return result.rows[0] || null;
 };

@@ -44,6 +44,10 @@ export const uploadFileToS3 = async (
     originalName: string,
     folder: string = 'portfolio/images'
 ) : Promise<string> => {
+//проверка содержимого в файле
+    if (fileBuffer.length === 0) {
+        throw new Error('Файл не должен быть пустым');
+    }
 //проверка originalName на пустоту
     if (!originalName || typeof originalName !== 'string') {
         throw new Error('Имя файла обязательно');
