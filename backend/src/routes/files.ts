@@ -4,6 +4,7 @@ import { getAllFiles, createFileItem, getFileItemById, deleteFileItem } from "..
 import { uploadFileToS3 } from "../services/fileService";
 import { FileItem } from "../models/types/Files";
 import path from "path";
+import { requireAuth } from "../middleware/authMiddleware";
 
 const router = Router();
 
@@ -44,7 +45,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', requireAuth, upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'Файл обязателен (поле "file")' });
@@ -94,7 +95,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
     const id = Number(req.params.id);
     if(isNaN(id) || id <= 0) {
         return res.status(400).json({ error: 'ID должен быть числом' });

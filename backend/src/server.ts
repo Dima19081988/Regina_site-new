@@ -1,11 +1,12 @@
 import express from 'express';
+import session from 'express-session';
 import cors from 'cors';
 import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
 import portfolioRouter from './routes/portfolio.js';
 import filesRouter from './routes/files.js';
-
+import authRouter from './routes/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,11 +14,22 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // true если используешь HTTPS (в продакшене)
+    maxAge: 1000 * 60 * 60 // 1 час
+  }
+}));
+
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
 app.use('/api/files', filesRouter);
-// app.use('/api/upload', uploadRouter)
+app.use('/api/auth', authRouter);
+
 app.use((err: any, req: any, res: any, next: any) => {
   if (err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({ error: 'Файл слишком большой. Максимум — 5 МБ.' });

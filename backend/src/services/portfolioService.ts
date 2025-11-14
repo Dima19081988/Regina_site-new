@@ -1,6 +1,6 @@
 import { db } from "../config/db";
 import { Portfolio } from "../models/types/Portfolio";
-import { deleteFileFromS3 } from "./fileService";
+import { deleteFileFromS3, uploadFileToS3 } from "./fileService";
 import { extractKeyFromUrl } from "../utils/s3";
 
 export const getAllPortfolioImages = async () : Promise<Portfolio[]> => {
@@ -74,6 +74,35 @@ export const updatePortfolio = async(
     
     const result = await db.query(queryTEXT, values);
     return result.rows[0] || null
+};
+
+export const updatePortfolioWithImage = async(
+    id: number,
+    data: Partial<Pick<Portfolio, 'title' | 'description' | 'category'>>,
+    newFileBuffer?: Buffer,
+    originalFileName?: string
+) : Promise<Portfolio | null> => {
+    const existing = await getPortfolioById(id);
+    if (!existing) return null;
+
+    let image_url = existing.image_url;
+
+    if (newFileBuffer && originalFileName) {
+        if (existing.image_url) {
+            try { 
+                const oldKey = extractKeyFromUrl(existing.image_url, process.env.S3_BUCKET!.trim());
+                await deleteFileFromS3(oldKey);
+            } catch (err) {
+                console.warn('Не удалось удалить старый файл:', err)
+            }
+        }
+        image_url = await uploadFileToS3(
+            newFileBuffer,
+            originalFileName,
+            'portfolio/images'
+        );
+    }
+    return await updatePortfolio(id, { ...data, image_url });
 };
 
 export const deletePortfolio = async(id: number) : Promise<boolean> => {

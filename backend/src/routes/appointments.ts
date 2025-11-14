@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { getAllAppointments, createAppointment, getAppointmentById, updateAppointment, deleteAppointment } from "../services/appointmentService";
 import { Appointment } from "../models/types/Apointments";
+import { requireAuth } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get('/', async(req, res) => {
+router.get('/', requireAuth, async(req, res) => {
     try {
         const appointments: Appointment[] = await getAllAppointments();
         res.json(appointments);
@@ -14,7 +15,7 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', requireAuth, async(req, res) => {
     const { client_name, service, appointment_time, price } = req.body;
     if(!client_name || !service || !appointment_time) {
         return res.status(400).json({ error: 'Поля client_name, service, appointment_time обязательны' });
@@ -29,7 +30,7 @@ router.post('/', async(req, res) => {
     }
 });
 
-router.get('/:id', async(req, res) => {
+router.get('/:id', requireAuth, async(req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
@@ -48,7 +49,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
@@ -67,7 +68,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', requireAuth, async(req, res) => {
     const { id } = req.params;
     const appointmentId = Number(id);
     if(isNaN(appointmentId) || appointmentId <= 0) {
@@ -85,6 +86,5 @@ router.delete('/:id', async(req, res) => {
         res.status(500).json({ error: 'Не удалось удалить запись' });
     }
 });
-
 
 export default router;

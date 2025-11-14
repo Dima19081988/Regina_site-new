@@ -5,9 +5,11 @@ import { getAllPortfolioImages,
         getPortfolioByCategory, 
         createPortfolio, 
         updatePortfolio, 
-        deletePortfolio } from "../services/portfolioService";
+        deletePortfolio, 
+        updatePortfolioWithImage} from "../services/portfolioService";
 import { uploadFileToS3 } from "../services/fileService";
 import { Portfolio } from "../models/types/Portfolio";
+import { requireAuth } from "../middleware/authMiddleware";
 
 
 const router = Router();
@@ -42,7 +44,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', requireAuth, upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'Файл обязателен, используйте поле "file"' });
@@ -98,7 +100,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, upload.single('image'), async (req, res) => {
     const { id } = req.params;
     const portfolioId = Number(id);
 
@@ -107,18 +109,30 @@ router.put('/:id', async (req, res) => {
     }
 
     try {
-        const portfolio = await updatePortfolio(portfolioId, req.body);
+        const { title, description, category } = req.body;
+        const updateData = { title, description, category };
+        const portfolio = await updatePortfolioWithImage(
+            portfolioId,
+            updateData,
+            req.file?.buffer,
+            req.file?.originalname
+        );
+        
         if (!portfolio) {
-            return res.status(404).json({ error: 'Портфолио по ID не найдено' });
+            return res.status(404).json({ error: 'Портфолио по ID не найдено' })
         }
+
         res.json(portfolio)
     } catch (err: any) {
         console.error('Ошибка при обновлении портфолио: ', err);
+        if (err.message?.includes('Разрешены только') || err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: err.message || 'Ошибка загрузки файла' });
+        }
         res.status(500).json({ error: err.message || 'Не удалось обновить портфолио' });
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
     const portfolioId = Number(id);
 
