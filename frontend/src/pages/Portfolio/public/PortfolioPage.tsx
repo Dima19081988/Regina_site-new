@@ -9,7 +9,7 @@ export default function PortfolioPage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchPortfolio = async() => {
+        const fetchPortfolio = async () => {
             try {
                 const response = await fetch('http://localhost:3000/api/portfolio');
                 if (!response.ok) {
@@ -36,12 +36,12 @@ export default function PortfolioPage() {
     }
 
     return (
-        <div className={styles['page-container']}>
-            <h1 className={styles['page-title']}>Портфолио</h1>
+        <div className='page-container'>
+            <h1 className='page-title'>Портфолио</h1>
             {portfolio.length === 0 ? (
                 <p>Пока нет работ в портфолио.</p>
             ) : (
-                <div className={styles['portfolio-grid']}>
+                <div className={styles.portfolioGrid}>
                     {portfolio.map((item) => (
                         <PortfolioCard key={item.id} item={item} />
                     ))}

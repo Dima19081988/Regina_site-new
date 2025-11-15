@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import type { PortfolioItem } from "../../../types";
-import PortfolioDetail from "../../../components/Portfolio/PortfolioDetail/portfolioDetail";
+import PortfolioDetail from "../../../components/Portfolio/PortfolioDetail/PortfolioDetail";
 
 export default function PortfolioDetailPage() {
     const { id } = useParams<{ id: string }>();
