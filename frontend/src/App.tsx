@@ -2,7 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PortfolioPage from "./pages/Portfolio/public/PortfolioPage";
 import PortfolioPageAdmin from "./pages/Portfolio/admin/PortfolioPageAdmin";
+import PortfolioDetailPage from "./pages/Portfolio/public/PortfolioDetailPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -10,7 +13,7 @@ function App() {
         {/* Публичные страницы */}
         <Route path="/" element={<div>Главная страница</div>}/>
         <Route path="/portfolio" element={<PortfolioPage />}/>
-
+        <Route path="/portfolio/:id" element={<PortfolioDetailPage />}/>
         {/* Админка */}
         <Route path="/admin/login" element={<LoginPage />}/>
         <Route element={<ProtectedRoute />}>

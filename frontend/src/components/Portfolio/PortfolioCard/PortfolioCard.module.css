@@ -41,3 +41,9 @@
   border-radius: 4px;
   font-size: 0.875rem;
 }
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}

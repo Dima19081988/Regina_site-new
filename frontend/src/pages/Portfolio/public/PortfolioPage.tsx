@@ -1,6 +1,6 @@
 import type { PortfolioItem } from "../../../types";
 import { useState, useEffect } from "react";
-import PortfolioCard from "../../../components/PortfolioCard/PortfolioCard";
+import PortfolioCard from "../../../components/Portfolio/PortfolioCard/PortfolioCard";
 import styles from './PortfolioPage.module.css';
 
 export default function PortfolioPage() {
