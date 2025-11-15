@@ -1,1 +1,5 @@
 .env
+
+# Security scripts
+generate-hash.ts
+temp-*.tsgenerate-hash.ts
