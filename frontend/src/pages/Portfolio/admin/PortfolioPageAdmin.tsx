@@ -1,72 +1,102 @@
 import { useState, useEffect } from "react";
 import type { PortfolioItem } from "../../../types";
 import styles from './PortfolioPageAdmin.module.css';
+import PortfolioUploadForm from "../../../components/Portfolio/PortfolioUploadForm/PortfolioUploadForm";
+import { Link } from "react-router-dom";
 
 export default function PortfolioPageAdmin() {
-    const [poortfolio, setPortfolio] = useState<PortfolioItem[]>([]);
+    const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchPortfolio = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/portfolio', {
-                    credentials: 'include'
-                });
+    
+    const fetchPortfolio = async() => {
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:3000/api/portfolio', {
+                credentials: 'include'
+            });
 
-                if (!response.ok) {
-                    throw new Error('Нет доступа к портфолио');
-                }
-                const data: PortfolioItem[] = await response.json();
-                setPortfolio(data);
-            } catch (err: any) {
-                setError(err.message || 'Ошибка загрузки');
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                throw new Error('Нет доступа к портфолио');
             }
-        };
+            const data: PortfolioItem[] = await response.json();
+            setPortfolio(data);
+        } catch (err: any) {
+            setError(err.message || 'Ошибка загрузки');
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    useEffect(() => {
         fetchPortfolio();
     }, []);
 
-    if (loading) {
-        return <div className={styles.container}>Загрузка портфолио...</div>;
-    }
+    const handleDelete = async(id: number) => {
+        if(!confirm('Удалить работу?')) return;
+        try {
+            const response = await fetch(`http://localhost:3000/api/portfolio/${id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
 
-    if (error) {
-        return <div className={styles.container}>Ошибка загрузки: {error}</div>;
-    }
+            if (response.ok) {
+                setPortfolio((prev) => prev.filter((item) => item.id !== id));
+            } else {
+                alert('Не удалось удалить работу');
+            }
+        } catch (err) {
+            alert('Ошибка подключения к серверу');
+
+        }
+    };
+
+    if (loading) return <div className={styles.container}>Загрузка портфолио...</div>;
+    if (error) return <div className={styles.container}>Ошибка загрузки: {error}</div>;
 
     return (
         <div className={styles.container}>
             <h1>Управление портфолио</h1>
-            <div className={styles.cardGrid}>
-                {poortfolio.map(item => (
-                    <div key={item.id} className={styles.card}>
-                        <img 
-                            src={item.image_url} 
-                            alt={item.title || 'Работа'}
-                            className={styles.image} 
-                        />
-                        <div className={styles.cardContent}>
-                            <h3>{item.title}</h3>
-                            {item.category && <p>Категория: {item.category}</p>}
-                            <button
-                                className={styles.deleteButton}
-                                onClick={() => handleDelete(item.id)}
-                            >
-                                Удалить
-                            </button>
+
+            {<PortfolioUploadForm onUploadSuccess={fetchPortfolio}/>}
+
+            {portfolio.length === 0 ? (
+                <p>Нет работ в портфолио</p>
+            ) : (
+                <div className={styles.cardGrid}>
+                   {portfolio.map((item) => (
+                      <Link
+                          key={item.id}
+                          to={`/admin/portfolio/${item.id}`}
+                          className={styles.cardLink}
+                      >
+                        <div className={styles.card}>
+                            <img 
+                                src={item.image_url} 
+                                alt={item.title || 'Работа'}
+                                className={styles.image}
+                            />
+                            <div className={styles.cardContent}>
+                                <h3>{item.title}</h3>
+                                {item.category && <p>Категория: {item.category}</p>}
+                                <button 
+                                    type="button"
+                                    className={styles.deleteButton}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleDelete(item.id);
+                                    }}
+                                >
+                                    Удалить
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                      </Link>
+                   ))}
+                </div>
+            )}
         </div>
     );
 }
 
-const handleDelete = (id: number) => {
-    if (confirm('Удалить работу?')) {
-        console.log('Удалить ID:', id);
-    // Реализуем позже
-    }
-};
