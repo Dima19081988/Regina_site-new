@@ -3,11 +3,11 @@ import multer from "multer";
 import { getAllPortfolioImages, 
         getPortfolioById, 
         getPortfolioByCategory, 
-        createPortfolio, 
-        updatePortfolio, 
+        createPortfolio,  
         deletePortfolio, 
         updatePortfolioWithImage} from "../services/portfolioService";
 import { uploadFileToS3 } from "../services/fileService";
+import { getFileHash } from "../services/fileService";
 import { Portfolio } from "../models/types/Portfolio";
 import { requireAuth } from "../middleware/authMiddleware";
 
@@ -60,12 +60,14 @@ router.post('/', requireAuth, upload.single('image'), async (req, res) => {
             req.file.originalname,
             'portfolio/images'
         );
-
+        
+        const fileHash = getFileHash(req.file.buffer);
         const portfolioEntry = await createPortfolio({
             title,
             description: description || null,
             image_url: uploadUrl,
             category,
+            file_hash: fileHash,
         });
         
         res.status(201).json(portfolioEntry);

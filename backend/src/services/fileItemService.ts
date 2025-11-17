@@ -3,14 +3,14 @@ import { FileItem } from "../models/types/Files";
 import { deleteFileFromS3 } from "./fileService";
 import { extractKeyFromUrl } from "../utils/s3";
 
-export const getAllFiles = async() : Promise<FileItem[]> => {
+export const getAllFiles = async(): Promise<FileItem[]> => {
     const result = await db.query('SELECT * FROM files ORDER BY created_at DESC');
     return result.rows;
 };
 
 export const createFileItem = async (
     Data: Pick<FileItem, 'title' | 'description' | 'file_url'> & { file_type: string }
-) : Promise<FileItem> => {
+): Promise<FileItem> => {
     const ext = Data.file_url.split('.').pop()?.toLowerCase() || null;
     const fileType = ext;
 
@@ -24,12 +24,12 @@ export const createFileItem = async (
     return result.rows[0];
 };
 
-export const getFileItemById = async (id: number) : Promise<FileItem | null> => {
+export const getFileItemById = async (id: number): Promise<FileItem | null> => {
     const result = await db.query(`SELECT * FROM files WHERE id = $1`, [id]);
     return result.rows[0] || null;
 };
 
-export const deleteFileItem = async (id: number) : Promise<boolean> => {
+export const deleteFileItem = async (id: number): Promise<boolean> => {
     const existing = await getFileItemById(id);
     if (!existing) return false;
 

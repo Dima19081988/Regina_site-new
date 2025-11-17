@@ -3,31 +3,31 @@ import { Portfolio } from "../models/types/Portfolio";
 import { deleteFileFromS3, uploadFileToS3 } from "./fileService";
 import { extractKeyFromUrl } from "../utils/s3";
 
-export const getAllPortfolioImages = async () : Promise<Portfolio[]> => {
+export const getAllPortfolioImages = async (): Promise<Portfolio[]> => {
     const result = await db.query('SELECT * FROM portfolio ORDER BY created_at DESC');
     return result.rows;
 };
 
-export const getPortfolioByCategory = async (category: string) : Promise<Portfolio[]> => {
+export const getPortfolioByCategory = async (category: string): Promise<Portfolio[]> => {
     const result = await db.query('SELECT * FROM portfolio WHERE category ILIKE $1 ORDER BY created_at DESC', [category]);
     return result.rows;
 };
 
 export const createPortfolio = async (
-    data: Pick<Portfolio, 'title' | 'description' | 'image_url' | 'category'>
-) : Promise<Portfolio> => {
-    const { title, description, image_url, category } = data;
+    data: Pick<Portfolio, 'title' | 'description' | 'image_url' | 'category' | 'file_hash'>
+): Promise<Portfolio> => {
+    const { title, description, image_url, category, file_hash } = data;
 
     const result = await db.query(
-        `INSERT INTO portfolio (title, description, image_url, category)
-        VALUES ($1, $2, $3, $4)
+        `INSERT INTO portfolio (title, description, image_url, category, file_hash)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *`,
-        [title, description, image_url, category]
+        [title, description, image_url, category, file_hash]
     );
     return result.rows[0];
 };
 
-export const getPortfolioById = async (id: number) : Promise<Portfolio | null> => {
+export const getPortfolioById = async (id: number): Promise<Portfolio | null> => {
     const result = await db.query('SELECT * FROM portfolio WHERE id = $1', [id]);
     return result.rows[0] || null;
 };
@@ -35,7 +35,7 @@ export const getPortfolioById = async (id: number) : Promise<Portfolio | null> =
 export const updatePortfolio = async(
     id: number,
     data: Partial<Pick<Portfolio, 'title' | 'description' | 'image_url' | 'category'>>
-) : Promise<Portfolio | null> => {
+): Promise<Portfolio | null> => {
     const fields: string[] = [];
     const values: any[] = [];
     let paramIndex = 1;
@@ -81,7 +81,7 @@ export const updatePortfolioWithImage = async(
     data: Partial<Pick<Portfolio, 'title' | 'description' | 'category'>>,
     newFileBuffer?: Buffer,
     originalFileName?: string
-) : Promise<Portfolio | null> => {
+): Promise<Portfolio | null> => {
     const existing = await getPortfolioById(id);
     if (!existing) return null;
 
@@ -105,7 +105,7 @@ export const updatePortfolioWithImage = async(
     return await updatePortfolio(id, { ...data, image_url });
 };
 
-export const deletePortfolio = async(id: number) : Promise<boolean> => {
+export const deletePortfolio = async(id: number): Promise<boolean> => {
     const existing = await getPortfolioById(id);
     if (!existing) {
         return false;
@@ -118,6 +118,10 @@ export const deletePortfolio = async(id: number) : Promise<boolean> => {
         try {
             const key = extractKeyFromUrl(existing.image_url, process.env.S3_BUCKET!.trim());
             await deleteFileFromS3(key);
+            if (existing.file_hash) {
+                await db.query('DELETE FROM file_hashes WHERE hash = $1', [existing.file_hash]);
+            }
+
         } catch (err) {
             console.error('⚠️ Не удалось удалить файл из облака:', err);
         }

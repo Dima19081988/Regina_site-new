@@ -34,7 +34,7 @@ const getMimeType = (ext: string): string => {
     }
 };
 
-const getFileHash = (buffer: Buffer): string => {
+export const getFileHash = (buffer: Buffer): string => {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 };
 
@@ -98,7 +98,7 @@ export const uploadFileToS3 = async (
     return `https://${BUCKET_NAME}.storage.yandexcloud.net/${key}`;
 };
 
-export const deleteFileFromS3 = async (key: string) : Promise<void> => {
+export const deleteFileFromS3 = async (key: string): Promise<void> => {
     if (!key) {
         throw new Error('Ключ файла не может быть пустым')
     }

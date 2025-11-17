@@ -1,14 +1,14 @@
 import { db } from "../config/db";
 import { Appointment } from "../models/types/Apointments";
 
-export const getAllAppointments = async () : Promise<Appointment[]> => {
+export const getAllAppointments = async (): Promise<Appointment[]> => {
     const result = await db.query('SELECT * FROM appointments ORDER BY appointment_time ASC');
     return result.rows;
 };
 
 export const createAppointment = async (
     data: Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>
-) : Promise<Appointment> => {
+): Promise<Appointment> => {
     const { client_name, service, appointment_time, price } = data;
     const result = await db.query(
         `INSERT INTO appointments (client_name, service, appointment_time, price)
@@ -20,7 +20,7 @@ export const createAppointment = async (
     return result.rows[0];
 };
 
-export const getAppointmentById = async (id: number) : Promise<Appointment | null> => {
+export const getAppointmentById = async (id: number): Promise<Appointment | null> => {
     const result = await db.query('SELECT * FROM appointments WHERE id = $1', [id]);
     return result.rows[0] || null;
 };
@@ -28,7 +28,7 @@ export const getAppointmentById = async (id: number) : Promise<Appointment | nul
 export const updateAppointment = async (
     id: number,
     data: Partial<Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price' | 'status'>>
-) : Promise<Appointment | null> => {
+): Promise<Appointment | null> => {
     const fields: string[] = [];
     const values: any[] = [];
     let paramIndex = 1;
