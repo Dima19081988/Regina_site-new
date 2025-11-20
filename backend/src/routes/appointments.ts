@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { getAllAppointments, createAppointment, getAppointmentById, updateAppointment, deleteAppointment } from "../services/appointmentService";
+import { getAllAppointments, createAppointment, getAppointmentById, getAllAppointmentByDate, getAppointmentCountsByMonth, updateAppointment, deleteAppointment } from "../services/appointmentService";
 import { Appointment } from "../models/types/Apointments";
 import { requireAuth } from "../middleware/authMiddleware";
+
+
 
 const router = Router();
 
@@ -22,7 +24,7 @@ router.post('/', requireAuth, async(req, res) => {
     }
 
     try {
-        const appointment: Appointment = await createAppointment({ client_name, service, appointment_time, price });
+        const appointment: Appointment = await createAppointment({ client_name, service, appointment_time, price: price ? parseFloat(price) : null });
         res.json(appointment);
     } catch (err) {
         console.error('Ошибка создания записи: ', err);
@@ -46,6 +48,37 @@ router.get('/:id', requireAuth, async(req, res) => {
     } catch (err) {
         console.error('Ошибка получения записи по ID: ', err);
         res.status(500).json({ error: 'Не удалось получить запись по ID' });
+    }
+});
+
+router.get('/date/:date', requireAuth, async(req, res) => {
+    const { date } = req.params;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return res.status(400).json({ error: 'Неверный формат даты. Используйте ГГГГ-ММ-ДД' });
+    }
+    try {
+        const appointments = await getAllAppointmentByDate(date);
+        res.json(appointments);
+    } catch (err: any) {
+        res.status(500).json({ error: 'Не удалось загрузить записи' });
+    }
+});
+
+router.get('/counts/:year/:month', requireAuth, async(req, res) => {
+    const { year, month } = req.params;
+    const yearNum = parseInt(year);
+    const monthNum = parseInt(month);
+
+    if (isNaN(yearNum) || isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
+        return res.status(400).json({ error: 'Год и месяц должны быть числами (месяц: 1–12)' });
+    }
+
+    try {
+        const counts = await getAppointmentCountsByMonth(yearNum, monthNum);
+        res.json(counts);
+    } catch (err: any) {
+        console.error('Ошибка загрузки статистики:', err);
+        res.status(500).json({ error: 'Не удалось загрузить данные' });
     }
 });
 

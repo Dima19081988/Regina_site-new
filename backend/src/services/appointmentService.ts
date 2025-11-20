@@ -25,9 +25,41 @@ export const getAppointmentById = async (id: number): Promise<Appointment | null
     return result.rows[0] || null;
 };
 
+export const getAllAppointmentByDate = async (date: string): Promise<Appointment[]> => {
+    const result = await db.query(`
+        SELECT * FROM appointments
+        WHERE appointment_time::date = $1
+        ORDER BY appointment_time ASC`,
+        [date]
+    );
+    return result.rows;
+};
+
+export const getAppointmentCountsByMonth = async (year: number, month: number): Promise<Record<string, number>> => {
+    const result = await db.query(
+        `SELECT
+            appointment_time::date AS day,
+            COUNT(*)::int AS count
+        FROM appointments
+        WHERE EXTRACT(YEAR FROM appointment_time) = $1
+          AND EXTRACT(MONTH FROM appointment_time) = $2
+        GROUP BY day
+        ORDER BY day`,
+        [year, month]
+    );
+
+    const counts: Record<string, number> = {};
+    for (const row of result.rows) {
+        const dayStr = row.day.toISOString().split('T')[0];
+        counts[dayStr] = row.count;
+        console.log('Row:', row);
+    }
+    return counts;
+};
+
 export const updateAppointment = async (
     id: number,
-    data: Partial<Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price' | 'status'>>
+    data: Partial<Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>>
 ): Promise<Appointment | null> => {
     const fields: string[] = [];
     const values: any[] = [];
@@ -54,12 +86,6 @@ export const updateAppointment = async (
     if (data.price != undefined) {
         fields.push(`price = $${paramIndex}`);
         values.push(data.price);
-        paramIndex ++;
-    }
-
-    if (data.status != undefined) {
-        fields.push(`status = $${paramIndex}`);
-        values.push(data.status);
         paramIndex ++;
     }
 

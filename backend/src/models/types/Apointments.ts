@@ -3,7 +3,6 @@ export interface Appointment {
     client_name: string;
     service: string;
     appointment_time: string;
-    status: 'pending' | 'confirmed' | 'cancelled'
     price: number | null;
     created_at: string;
 }
