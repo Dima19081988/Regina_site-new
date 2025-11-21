@@ -15,3 +15,10 @@ export interface Appointment {
   price: number | null;
   created_at: string;
 }
+
+export interface Note {
+  id: number;
+  title: string;
+  content: string | null;
+  created_at: string;
+}

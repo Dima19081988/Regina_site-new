@@ -6,6 +6,7 @@ import PortfolioDetailPage from "./pages/Portfolio/public/PortfolioDetailPage";
 import PortfolioDetailPageAdmin from "./pages/Portfolio/admin/PortfolioDetailPageAdmin";
 import PortfolioEditPageAdmin from "./pages/Portfolio/admin/PortfolioEditPageAdmin";
 import AppointmentsPageAdmin from "./pages/Appointments/admin/AppointmentsPageAdmin";
+import AdminNotesPage from "./pages/Notes/AdminNotesPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/admin/portfolio/:id" element={<PortfolioDetailPageAdmin />} />
           <Route path="/admin/portfolio/:id/edit" element={<PortfolioEditPageAdmin />} />
           <Route path="/admin/appointments" element={<AppointmentsPageAdmin />} />
+          <Route path="/admin/notes" element={<AdminNotesPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
