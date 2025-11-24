@@ -7,6 +7,7 @@ import PortfolioDetailPageAdmin from "./pages/Portfolio/admin/PortfolioDetailPag
 import PortfolioEditPageAdmin from "./pages/Portfolio/admin/PortfolioEditPageAdmin";
 import AppointmentsPageAdmin from "./pages/Appointments/admin/AppointmentsPageAdmin";
 import AdminNotesPage from "./pages/Notes/AdminNotesPage";
+import AdminFilesPage from "./pages/Files/AdminFilesPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin/portfolio/:id/edit" element={<PortfolioEditPageAdmin />} />
           <Route path="/admin/appointments" element={<AppointmentsPageAdmin />} />
           <Route path="/admin/notes" element={<AdminNotesPage />} />
+          <Route path="/admin/files" element={<AdminFilesPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
