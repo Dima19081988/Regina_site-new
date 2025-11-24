@@ -1,15 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/Login/LoginPage";
-import PortfolioPage from "./pages/Portfolio/public/PortfolioPage";
-import PortfolioPageAdmin from "./pages/Portfolio/admin/PortfolioPageAdmin";
-import PortfolioDetailPage from "./pages/Portfolio/public/PortfolioDetailPage";
-import PortfolioDetailPageAdmin from "./pages/Portfolio/admin/PortfolioDetailPageAdmin";
-import PortfolioEditPageAdmin from "./pages/Portfolio/admin/PortfolioEditPageAdmin";
-import AppointmentsPageAdmin from "./pages/Appointments/admin/AppointmentsPageAdmin";
-import AdminNotesPage from "./pages/Notes/AdminNotesPage";
-import AdminFilesPage from "./pages/Files/AdminFilesPage";
-import ProtectedRoute from "./components/ProtectedRoute";
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/Login/LoginPage';
+import PortfolioPage from './pages/Portfolio/public/PortfolioPage';
+import PortfolioPageAdmin from './pages/Portfolio/admin/PortfolioPageAdmin';
+import PortfolioDetailPage from './pages/Portfolio/public/PortfolioDetailPage';
+import PortfolioDetailPageAdmin from './pages/Portfolio/admin/PortfolioDetailPageAdmin';
+import PortfolioEditPageAdmin from './pages/Portfolio/admin/PortfolioEditPageAdmin';
+import AppointmentsPageAdmin from './pages/Appointments/admin/AppointmentsPageAdmin';
+import AdminNotesPage from './pages/Notes/AdminNotesPage';
+import AdminFilesPage from './pages/Files/AdminFilesPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (

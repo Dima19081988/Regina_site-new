@@ -1,33 +1,33 @@
 .admin-appointments-page {
-    padding: 20px;
+  padding: 20px;
 }
 
 .admin-appointments-page h1 {
-    margin-bottom: 24px;
-    color: #2c3e50;
+  margin-bottom: 24px;
+  color: #2c3e50;
 }
 
 .reminders {
-    background: #f8f9fa;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    border-left: 4px solid #3498db;
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #3498db;
 }
 
 .reminder {
-    padding: 8px 0;
-    font-weight: 600;
+  padding: 8px 0;
+  font-weight: 600;
 }
 
 .reminder.today {
-    color: #e74c3c;
+  color: #e74c3c;
 }
 
 .reminder.tomorrow {
-    color: #3498db;
+  color: #3498db;
 }
 
 .reminder.after-tomorrow {
-    color: #2ecc71;
+  color: #2ecc71;
 }

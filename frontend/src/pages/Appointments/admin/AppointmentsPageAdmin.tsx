@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import type { Appointment } from "../../../types";
-import Calendar from "../../../components/Calendar/Calendar";
-import { pluralize } from "../../../utils/pluralize";
-import './AppointmentsPageAdmin.module.css'
+import { useState, useEffect } from 'react';
+import type { Appointment } from '../../../types';
+import Calendar from '../../../components/Calendar/Calendar';
+import { pluralize } from '../../../utils/pluralize';
+import './AppointmentsPageAdmin.module.css';
 
 export default function AppointmentsPageAdmin() {
   const [today, setToday] = useState<Appointment[]>([]);
@@ -18,7 +18,7 @@ export default function AppointmentsPageAdmin() {
       ]);
       setToday(await todayRes.json());
       setTomorrow(await tomorrowRes.json());
-      setAfterTomorrow(await afterTomorrowRes.json())
+      setAfterTomorrow(await afterTomorrowRes.json());
     };
     loadReminders();
   }, []);
@@ -40,7 +40,8 @@ export default function AppointmentsPageAdmin() {
           )}
           {afterTomorrow.length > 0 && (
             <div className="reminder-afterTomorrow">
-              📅<strong>Завтра</strong> у вас {afterTomorrow.length} {pluralize(afterTomorrow.length)}.
+              📅<strong>Завтра</strong> у вас {afterTomorrow.length}{' '}
+              {pluralize(afterTomorrow.length)}.
             </div>
           )}
         </div>
