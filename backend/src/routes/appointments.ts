@@ -22,7 +22,7 @@ router.get('/today', requireAuth, async (req, res) => {
     try {
         const appointments = await getAllAppointmentByDate(today);
         res.json(appointments);
-    } catch (err: any) {
+    } catch (err) {
         console.error('Ошибка загрузки записей на сегодня:', err);
         res.status(500).json({ error: 'Не удалось загрузить записи' });
     }
@@ -33,7 +33,7 @@ router.get('/tomorrow', requireAuth, async (req, res) => {
     try {
         const appointments = await getAllAppointmentByDate(tomorrow);
         res.json(appointments);
-    } catch (err: any) {
+    } catch (err) {
         console.error('Ошибка загрузки записей на завтра:', err);
         res.status(500).json({ error: 'Не удалось загрузить записи' });
     }
@@ -44,7 +44,7 @@ router.get('/after-tomorrow', requireAuth, async (req, res) => {
     try {
         const appointments = await getAllAppointmentByDate(afterTomorrow);
         res.json(appointments);
-    } catch (err: any) {
+    } catch (err) {
         console.error('Ошибка загрузки записей на послезавтра:', err);
         res.status(500).json({ error: 'Не удалось загрузить записи' });
     }
@@ -117,7 +117,8 @@ router.get('/date/:date', requireAuth, async (req, res) => {
     try {
         const appointments = await getAllAppointmentByDate(date);
         res.json(appointments);
-    } catch (err: any) {
+    } catch (err) {
+        console.error('Ошибка:', err);
         res.status(500).json({ error: 'Не удалось загрузить записи' });
     }
 });
@@ -134,7 +135,7 @@ router.get('/counts/:year/:month', requireAuth, async (req, res) => {
     try {
         const counts = await getAppointmentCountsByMonth(yearNum, monthNum);
         res.json(counts);
-    } catch (err: any) {
+    } catch (err) {
         console.error('Ошибка загрузки статистики:', err);
         res.status(500).json({ error: 'Не удалось загрузить данные' });
     }

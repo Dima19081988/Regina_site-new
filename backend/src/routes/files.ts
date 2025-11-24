@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
     try {
         const files: FileItem[] = await getAllFiles();
         res.json(files)
-    } catch (err: any) {
+    } catch (err) {
         console.error('Ошибка при получении файлов', err);
         res.status(500).json({ error: 'Не удалось загрузить файлы' });
     }
@@ -90,7 +90,8 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Файл по ID не найден'});
         }
         res.json(fileItem);
-    } catch (err: any) {
+    } catch (err) {
+        console.error('Ошибка:', err);
         res.status(500).json({ error: 'Ошибка получения файла' });
     }
 });
@@ -106,7 +107,8 @@ router.delete('/:id', requireAuth, async (req, res) => {
             return res.status(404).json({ error: 'Файл не найден' });
         }
         res.status(204).send();
-    } catch (err: any) {
+    } catch (err) {
+        console.error('Ошибка:', err);
         res.status(500).json({ error: 'Ошибка удаления файла' });
     }
 });

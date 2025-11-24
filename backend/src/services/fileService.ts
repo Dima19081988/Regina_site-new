@@ -6,7 +6,10 @@ import { db } from "../config/db";
 import crypto from 'crypto';
 
 
-const BUCKET_NAME = process.env.S3_BUCKET?.trim()!;
+const BUCKET_NAME = process.env.S3_BUCKET?.trim();
+if (!BUCKET_NAME) {
+    throw new Error('S3_BUCKET не задан в .env');
+};
 
 const ALLOWED_EXTENSIONS = new Set([
     '.jpg', '.jpeg', '.png', '.webp', '.gif',
