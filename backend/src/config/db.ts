@@ -2,20 +2,18 @@ import { config } from 'dotenv';
 config();
 import { Pool } from 'pg';
 
-const password = process.env.DB_PASSWORD 
-  ? String(process.env.DB_PASSWORD) 
-  : undefined;
+const password = process.env.DB_PASSWORD ? String(process.env.DB_PASSWORD) : undefined;
 
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '5432'),
   database: process.env.DB_NAME || 'regina_cosmetologist',
   user: process.env.DB_USER || 'postgres',
-  password: password
+  password: password,
 });
 
 export const db = {
-    query: (text: string, params?: any[]) => pool.query(text, params),
+  query: (text: string, params?: any[]) => pool.query(text, params),
 
-    connect: () => pool.connect()
+  connect: () => pool.connect(),
 };

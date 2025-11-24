@@ -11,22 +11,26 @@ import authRouter from './routes/auth.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false, // true если используешь HTTPS (в продакшене)
-    maxAge: 1000 * 60 * 60 // 1 час
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true если используешь HTTPS (в продакшене)
+      maxAge: 1000 * 60 * 60, // 1 час
+    },
+  })
+);
 
 app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
@@ -43,7 +47,7 @@ app.use((err: any, req: any, res: any) => {
   }
   console.error('Multer error:', err);
   res.status(500).json({ error: 'Ошибка при загрузке файла' });
-})
+});
 console.log('✅ Routers connected: appointments, notes, portfolio, files');
 
 app.get('/', (req, res) => {
