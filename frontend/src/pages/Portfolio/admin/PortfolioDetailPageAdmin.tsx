@@ -27,6 +27,7 @@ export default function PortfolioDetailPageAdmin() {
                 const data: PortfolioItem = await response.json();
                 setItem(data);
             } catch (err) {
+                console.error('Ошибка:', err);
                 alert('Не удалось загрузить работу');
                 navigate('/admin/portfolio');
             } finally {
@@ -51,6 +52,7 @@ export default function PortfolioDetailPageAdmin() {
                 alert('')
             }
             } catch (err) {
+                console.error('Ошибка:', err);
                 alert('Ошибка подключения к серверу');
         };
     }

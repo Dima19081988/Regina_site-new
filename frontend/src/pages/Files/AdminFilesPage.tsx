@@ -21,8 +21,9 @@ export default function AdminFilesPage() {
                 if (!response.ok) throw new Error('Нет доступа к файлам');
                 const data: FileItem[] = await response.json();
                 setFiles(data);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err) {
+                console.error('Ошибка:', err);
+                setError('Ошибка подключения');
             } finally {
                 setLoading(false)
             }

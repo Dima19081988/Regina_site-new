@@ -23,8 +23,9 @@ export default function PortfolioDetailPage() {
                 }
                 const data: PortfolioItem = await response.json();
                 setItem(data);
-            } catch (err: any) {
-                setError(err.message || 'Ошибка загрузки')
+            } catch (err) {
+                console.error('Ошибка:', err);
+                setError('Ошибка загрузки')
             } finally {
                 setLoading(false);
             }

@@ -23,8 +23,9 @@ export default function AdminNotesPage() {
                 }
                 const data: Note[] = await response.json();
                 setNotes(data);
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err) {
+                console.error('Ошибка:', err);
+                setError('Ошибка подключения');
             } finally {
                 setLoading(false);
             }
@@ -64,6 +65,7 @@ export default function AdminNotesPage() {
                 alert(err.error || 'Ошибка сохранения');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения к серверу');
         } finally {
             setSubmitting(false);
@@ -83,6 +85,7 @@ export default function AdminNotesPage() {
                 alert('Не удалось удалить заметку');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения');
         }
     };

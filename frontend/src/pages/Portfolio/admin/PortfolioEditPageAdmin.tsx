@@ -57,6 +57,7 @@ export default function PortfolioEditPageAdmin() {
                 alert (data.error || 'Ошибка обновления')
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения к серверу');
         } finally {
             setSubmitting(false);

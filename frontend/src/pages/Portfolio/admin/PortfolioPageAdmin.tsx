@@ -22,8 +22,9 @@ export default function PortfolioPageAdmin() {
             }
             const data: PortfolioItem[] = await response.json();
             setPortfolio(data);
-        } catch (err: any) {
-            setError(err.message || 'Ошибка загрузки');
+        } catch (err) {
+            console.error('Ошибка:', err);
+            setError('Ошибка загрузки');
         } finally {
             setLoading(false);
         }
@@ -47,6 +48,7 @@ export default function PortfolioPageAdmin() {
                 alert('Не удалось удалить работу');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения к серверу');
 
         }

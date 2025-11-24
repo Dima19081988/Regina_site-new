@@ -30,6 +30,7 @@ export default function LoginPage() {
                 setError(data.error || 'Неверный пароль')
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             setError('Не удалось подключиться к серверу');
         } finally {
             setLoading(false);

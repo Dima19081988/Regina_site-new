@@ -31,7 +31,8 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
                 } else {
                     setError('Не удалось загрузить записи');
                 }
-            } catch (err: any) {
+            } catch (err) {
+                console.error('Ошибка:', err);
                 setError('Ошибка подключения');
             } finally {
                 setLoading(false);
@@ -68,6 +69,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
                 alert('Не удалось добавить запись');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения');
         }
     };
@@ -114,6 +116,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
                 alert('Не удалось обновить запись')
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения');
         }
     };
@@ -132,6 +135,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
                 alert('Не удалось удалить запись');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения');
         }
     };

@@ -45,6 +45,7 @@ export default function PortfolioUploadForm({ onUploadSuccess }: PortfolioUpload
                 alert(data.error || 'Не удалось добавить работу');
             }
         } catch (err) {
+            console.error('Ошибка:', err);
             alert('Ошибка подключения к серверу');
         } finally {
             setLoading(false);

@@ -17,8 +17,9 @@ export default function PortfolioPage() {
                 }
                 const data: PortfolioItem[] = await response.json();
                 setPortfolio(data);
-            } catch (err: any) {
-                setError(err.message || 'Ошибка загрузки');
+            } catch (err) {
+                console.error('Ошибка:', err);
+                setError('Ошибка загрузки');
             } finally {
                 setLoading(false);
             }

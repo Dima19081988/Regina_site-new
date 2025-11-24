@@ -12,6 +12,7 @@ export default function ProtectedRoute() {
                 const auth = await checkAuth();
                 setIsAuthenticated(auth);
             } catch (err) {
+                console.error('Ошибка:', err);
                 setIsAuthenticated(false);
             } finally {
                 setLoading(false);
