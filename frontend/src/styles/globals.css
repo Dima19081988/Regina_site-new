@@ -16,6 +16,7 @@ img {
   height: auto;
 }
 
+/* === Общий контейнер === */
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -26,4 +27,146 @@ img {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+
+/* === Общие стили для карточек === */
+.card {
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: #f8f9fa;
+}
+
+.card-image:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.card-content h3 {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  color: #1976d2;
+}
+
+.card-content p {
+  color: #555;
+  margin: 6px 0;
+}
+
+/* === Кнопки === */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+/* === Сетки === */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* === Формы === */
+.form-container {
+  background: #f9fbfd;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d8e0;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.textarea-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-preview {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-top: 6px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.action-buttons button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

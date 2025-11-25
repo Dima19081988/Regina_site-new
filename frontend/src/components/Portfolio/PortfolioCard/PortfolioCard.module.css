@@ -1,3 +1,31 @@
+.category {
+  display: inline-block;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+  color: #1976d2;
+}
+
+.description {
+  color: #555;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+/* 
 .card {
   border: 1px solid #eee;
   border-radius: 8px;
@@ -46,4 +74,4 @@
   text-decoration: none;
   color: inherit;
   display: block;
-}
+} */

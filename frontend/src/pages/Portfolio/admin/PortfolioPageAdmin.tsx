@@ -64,17 +64,17 @@ export default function PortfolioPageAdmin() {
       {portfolio.length === 0 ? (
         <p>Нет работ в портфолио</p>
       ) : (
-        <div className={styles.cardGrid}>
+        <div className="card-grid">
           {portfolio.map((item) => (
-            <Link key={item.id} to={`/admin/portfolio/${item.id}`} className={styles.cardLink}>
-              <div className={styles.card}>
-                <img src={item.image_url} alt={item.title || 'Работа'} className={styles.image} />
-                <div className={styles.cardContent}>
+            <Link key={item.id} to={`/admin/portfolio/${item.id}`} className="card">
+              <div className="card">
+                <img src={item.image_url} alt={item.title || 'Работа'} className="card-image" />
+                <div className="card-content">
                   <h3>{item.title}</h3>
                   {item.category && <p>Категория: {item.category}</p>}
                   <button
                     type="button"
-                    className={styles.deleteButton}
+                    className="btn btn-danger"
                     onClick={(e) => {
                       e.preventDefault();
                       handleDelete(item.id);

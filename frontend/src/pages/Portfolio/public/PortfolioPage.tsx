@@ -1,7 +1,6 @@
 import type { PortfolioItem } from '../../../types';
 import { useState, useEffect } from 'react';
 import PortfolioCard from '../../../components/Portfolio/PortfolioCard/PortfolioCard';
-import styles from './PortfolioPage.module.css';
 
 export default function PortfolioPage() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
@@ -42,7 +41,7 @@ export default function PortfolioPage() {
       {portfolio.length === 0 ? (
         <p>Пока нет работ в портфолио.</p>
       ) : (
-        <div className={styles.portfolioGrid}>
+        <div className="card-grid">
           {portfolio.map((item) => (
             <PortfolioCard key={item.id} item={item} />
           ))}
