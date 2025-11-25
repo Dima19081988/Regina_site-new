@@ -1,12 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { checkAuth } from '../../api/authApi';
 import styles from './LoginPage.module.css';
 
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth().then(isAuth => {
+      if (isAuth) {
+        navigate('/admin/appointments', { replace: true });
+      }
+      setCheckingAuth(false);
+    });
+  }, []);
+
+  if (checkingAuth) {
+    return <div>Проверка сессии...</div>;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +39,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/admin/portfolio');
+        navigate('/admin/');
       } else {
         setError(data.error || 'Неверный пароль');
       }
