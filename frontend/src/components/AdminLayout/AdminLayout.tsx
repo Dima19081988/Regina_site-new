@@ -15,14 +15,14 @@ export default function AdminLayout({
     onAddClick,
  }: AdminLayoutProps) {
     return (
-        <div className={styles.container}>
+        <div className={styles['admin-layout']}>
             <div className={styles.header}>
-                <Link to="/admin/" className={styles.backButton}>
+                <Link to="/admin/" className={styles['back-button']}>
                     ← Назад
                 </Link>
-                <h1>{title}</h1>
+                <h1 className={styles.title}>{title}</h1>
                 {showAddButton && (
-                    <button onClick={onAddClick} className={styles.addButton}>
+                    <button onClick={onAddClick} className={styles['add-button']}>
                         + Добавить
                     </button>
                 )}

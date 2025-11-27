@@ -1,17 +1,100 @@
 .container {
-  padding: 20px;
+  padding: var(--space-lg);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .container h1 {
-  margin-bottom: 24px;
-  color: #2c3e50;
-  font-size: 2rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
 }
 
-.card-link {
+.emptyMessage {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-lg) 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.cardLink {
   text-decoration: none;
   color: inherit;
   display: block;
+  transition: transform 0.2s ease;
+}
+
+.cardLink:hover {
+  transform: scale(1.02);
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cardContent {
+  padding: var(--space-md);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+}
+
+.cardCategory {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.deleteButton {
+  background: var(--color-danger);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--space-md);
+  transition: background 0.3s ease;
+}
+
+.deleteButton:hover {
+  background: #c0392b;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .cardImage {
+    height: 180px;
+  }
+
+  .cardContent {
+    padding: var(--space-sm);
+  }
 }

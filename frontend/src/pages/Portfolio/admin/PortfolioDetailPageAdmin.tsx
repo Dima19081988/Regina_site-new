@@ -77,7 +77,11 @@ export default function PortfolioDetailPageAdmin() {
           Назад
         </button>
       </div>
-      <PortfolioDetail item={item} />
+      {item ? (
+        <PortfolioDetail item={item} />
+      ) : (
+        <p>Загрузка...</p>
+      )}
     </div>
   );
 }

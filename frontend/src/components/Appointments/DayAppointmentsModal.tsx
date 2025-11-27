@@ -145,12 +145,12 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
   });
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>
+    <div className={styles['modal__overlay']} onClick={onClose}>
+      <div className={styles['modal__content']} onClick={(e) => e.stopPropagation()}>
+        <button className={styles['close-button']} onClick={onClose}>
           ✕
         </button>
-        <div className={styles.header}>
+        <div className={styles['modal__header']}>
           <h2>Записи на {formattedDate}</h2>
         </div>
 

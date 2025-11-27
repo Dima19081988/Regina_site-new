@@ -110,7 +110,7 @@ export default function AdminFilesPage() {
     <div className={styles.container}>
       <h1>Файлы</h1>
 
-      <form onSubmit={handleUpload} className={styles.uloadForm}>
+      <form onSubmit={handleUpload} className={styles.uploadForm}>
         <h2>Загрузить новый файл</h2>
         <div className={styles.formGroup}>
           <label>Название *</label>

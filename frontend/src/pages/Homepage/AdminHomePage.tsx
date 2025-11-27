@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { pluralize } from "../../utils/pluralize";
-import styles from './Homepage.module.css';
+import styles from './AdminHomePage.module.css';
 
 export default function AdminHomepage() {
     const navigate = useNavigate();
@@ -63,24 +63,24 @@ export default function AdminHomepage() {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Начальная страница админки</h1>
-                <button onClick={handleLogout} className={styles.logoutButton}>
+                <h1 className={styles.title}>Сделай выбор</h1>
+                <button onClick={handleLogout} className={styles['logout-button']}>
                     Выйти
                 </button>
             </header>
             <nav className={styles.nav}>
                 <ul>
-                    <li><Link to="/admin/portfolio">Портфолио</Link></li>
-                    <li><Link to="/admin/pricelist">Прайслист</Link></li>
-                    <li><Link to="/admin/files">Файлы</Link></li>
-                    <li><Link to="/admin/notes">Заметки</Link></li>
-                    <li><Link to="/admin/appointments">Записи</Link></li>
+                    <li><Link to="/admin/portfolio" className={styles['nav-link']}>Портфолио</Link></li>
+                    <li><Link to="/admin/pricelist" className={styles['nav-link']}>Прайслист</Link></li>
+                    <li><Link to="/admin/files" className={styles['nav-link']}>Файлы</Link></li>
+                    <li><Link to="/admin/notes" className={styles['nav-link']}>Заметки</Link></li>
+                    <li><Link to="/admin/appointments" className={styles['nav-link']}>Записи</Link></li>
                 </ul>
             </nav>
             <div className={styles.stats}>
-                <div>Сегодня: {todayAppointments} {pluralize(todayAppointments)}</div>
-                <div>Файлов: {fileCount}</div>
-                <div>Записей в Портфолио: {portfolioCount}</div>
+                <div className={styles['stat-item']}>Сегодня: {todayAppointments} {pluralize(todayAppointments)}</div>
+                <div className={styles['stat-item']}>Файлов: {fileCount}</div>
+                <div className={styles['stat-item']}>Записей в Портфолио: {portfolioCount}</div>
             </div>
         </div>
     );

@@ -1,0 +1,44 @@
+.pageContainer {
+  padding: var(--space-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding: var(--space-xl) 0;
+  font-size: var(--font-size-lg);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 767px) {
+  .pageContainer {
+    padding: var(--space-lg);
+  }
+
+  .pageTitle {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-md);
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}

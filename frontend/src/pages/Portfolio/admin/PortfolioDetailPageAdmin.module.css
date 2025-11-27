@@ -1,48 +1,68 @@
 .container {
-  padding: 20px;
+  padding: var(--space-lg);
   max-width: 900px;
   margin: 0 auto;
 }
 
 .actions {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
   flex-wrap: wrap;
 }
 
 .actions button {
-  padding: 8px 16px;
+  padding: var(--space-xs) var(--space-md);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  transition: all 0.3s ease;
 }
 
 .editButton {
-  background: #3498db;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
-.editButton:hover {
-  background: #2980b9;
+.editButton:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .deleteButton {
-  background: #e74c3c;
-  color: white;
+  background: var(--color-danger);
+  color: var(--color-white);
 }
 
-.deleteButton:hover {
+.deleteButton:hover:not(:disabled) {
   background: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .backButton {
-  background: #95a5a6;
-  color: white;
+  background: var(--color-secondary);
+  color: var(--color-white);
 }
 
-.backButton:hover {
-  background: #7f8c8d;
+.backButton:hover:not(:disabled) {
+  background: #27ae60;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 767px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actions button {
+    width: 100%;
+    margin-top: var(--space-xs);
+  }
 }

@@ -70,7 +70,7 @@ export default function Calendar() {
   };
 
   const renderGrid = () => (
-    <div className={styles.daysGrid}>
+    <div className={styles['days-grid']}>
       {days.map((day, index) => {
         if (day === null) {
           return <div key={index} className={styles.emptyDay}></div>
@@ -79,16 +79,18 @@ export default function Calendar() {
         const localDate = new Date(year, month, day);
         const dayStr = localDate.toISOString().split('T')[0];
         const count = counts[dayStr] || 0;
+        const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
 
 
         return (
           <div
             key={index}
-            className={`${styles.day} ${count > 0 ? styles.hasAppointments : ''}`}
+            className={`${styles.day} ${count > 0 ? styles['day--has-appointments'] : ''}`}
             onClick={() => handleDayClick(day)}
           >
-            <div className={styles.dayNumber}>{day}</div>
-            {count > 0 && <div className={styles.badge}>{count}</div>}
+            <div className={styles['day__number']}>{day}</div>
+            <div className={styles['day__weekday']}>{dayOfWeek}</div>
+            {count > 0 && <div className={styles['day__badge']}>{count}</div>}
           </div>
         );
       })}
@@ -96,28 +98,27 @@ export default function Calendar() {
   );
 
   const renderList = () => (
-    <div className={styles.appointmentList}>
+    <div className={styles['appointment-list']}>
       {days.map((day, index) => {
         if (day === null) return null;
 
         const localDate = new Date(year, month, day);
         const dateStr = localDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
-        const count = counts[dateStr] || 0;
-        
+        const count = counts[dateStr] || 0;  
         const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
 
         return (
           <div
             key={index}
-            className={styles.listItem}
+            className={styles['appointment-item']}
             onClick={() => handleDayClick(day)}
           >
-            <div className={styles.listItemHeader}>
-              <div className={styles.listDayInfo}>
-                <span className={styles.listDay}>{day}</span>
-                <span className={styles.listWeekday}>{dayOfWeek}</span>
+            <div className={styles['appointment-header']}>
+              <div className={styles['day-info']}>
+                <span className={styles['day-info__number']}>{day}</span>
+                <span className={styles['day-info__weekday']}>{dayOfWeek}</span>
               </div>
-              {count > 0 && <div className={styles.listBadge}>{count}</div>}
+              {count > 0 && <div className={styles['appointment-badge']}>{count}</div>}
             </div>
           </div>
         );
@@ -128,22 +129,22 @@ export default function Calendar() {
   return (
     <div className={styles.calendar}>
       {/* Шапка: навигация */}
-      <div className={styles.header}>
-        <button onClick={prevMonth} className={styles.navButton}>
+      <div className={styles['calendar__header']}>
+        <button onClick={prevMonth} className={styles['button--nav']}>
           ❮
         </button>
-        <h2 className={styles.monthTitle}>
+        <h2 className={styles['calendar__title']}>
           {currentDate.toLocaleString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
         </h2>
-        <button onClick={nextMonth} className={styles.navButton}>
+        <button onClick={nextMonth} className={styles['button--nav']}>
           ❯
         </button>
       </div>
       {/* Дни недели */}
       {viewMode === 'grid' && (
-        <div className={styles.weekDays}>
+        <div className={styles.weekdays}>
           {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
-            <div key={day} className={styles.weekdays}>
+            <div key={day} className={styles.weekday}>
               {day}
             </div>
           ))}

@@ -9,14 +9,14 @@ export interface PortfolioCardProps {
 export default function PortfolioCard({ item }: PortfolioCardProps) {
   return (
     <Link to={`/portfolio/${item.id}`} className={styles.cardLink}>
-      <div className="card">
+      <div className={styles.card}>
         <img
           src={item.image_url}
           alt={item.title || 'Работа'}
-          className="card-image"
+          className={styles.cardImage}
           loading="lazy"
         />
-        <div className="card-content">
+        <div className={styles.cardContent}>
           <h2 className={styles.title}>{item.title}</h2>
           {item.description && <p className={styles.description}>{item.description}</p>}
           {item.category && <span className={styles.category}>{item.category}</span>}

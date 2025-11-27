@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Appointment } from '../../../types';
 import Calendar from '../../../components/Calendar/Calendar';
 import { pluralize } from '../../../utils/pluralize';
-import './AppointmentsPageAdmin.module.css';
+import styles from './AppointmentsPageAdmin.module.css';
 
 export default function AppointmentsPageAdmin() {
   const [today, setToday] = useState<Appointment[]>([]);
@@ -24,22 +24,22 @@ export default function AppointmentsPageAdmin() {
   }, []);
 
   return (
-    <div className="admin-appointments-page">
-      <h1>Записи клиентов</h1>
+    <div className={styles['admin-appointments-page']}>
+      <h1 className={styles['admin-appointments-page__title']}>Записи клиентов</h1>
       {(today.length > 0 || tomorrow.length > 0 || afterTomorrow.length > 0) && (
-        <div className="reminders">
+        <div className={styles.reminders}>
           {today.length > 0 && (
-            <div className="reminder-today">
+            <div className={`${styles.reminder} ${styles['reminder--today']}`}>
               ⚠️<strong>Сегодня</strong> у вас {today.length} {pluralize(today.length)}!
             </div>
           )}
           {tomorrow.length > 0 && (
-            <div className="reminder-tomorrow">
+            <div className={`${styles.reminder} ${styles['reminder--tomorrow']}`}>
               🔔<strong>Завтра</strong> у вас {tomorrow.length} {pluralize(tomorrow.length)}.
             </div>
           )}
           {afterTomorrow.length > 0 && (
-            <div className="reminder-afterTomorrow">
+            <div className={`${styles.reminder} ${styles['reminder--after-tomorrow']}`}>
               📅<strong>Завтра</strong> у вас {afterTomorrow.length}{' '}
               {pluralize(afterTomorrow.length)}.
             </div>
