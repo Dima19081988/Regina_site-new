@@ -1,0 +1,83 @@
+.pricelist {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  color: var(--color-text);
+}
+
+.pricelist h2 {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.pricelistCategory {
+  margin-bottom: var(--space-xl);
+}
+
+.pricelistCategory h3 {
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.pricelistTable {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 8px rgba(155, 89, 182, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.pricelistTable th,
+.pricelistTable td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.pricelistTable th {
+  background-color: var(--color-bg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pricelistTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.pricelistTable tbody tr:hover {
+  background-color: var(--color-bg);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 600px) {
+  .pricelist {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .pricelistTable {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pricelistTable th,
+  .pricelistTable td {
+    padding: var(--space-sm);
+    min-width: 120px;
+    font-size: var(--font-size-sm);
+  }
+
+  .pricelistTable th {
+    font-size: var(--font-size-xs);
+  }
+}

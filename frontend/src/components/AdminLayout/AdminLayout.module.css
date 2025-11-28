@@ -1,8 +1,11 @@
 .admin-layout {
+  min-height: 100vh;
+  background: var(--color-bg-admin);
+  color: var(--color-text-admin);
+  --color-primary: var(--color-accent-admin);
   padding: var(--space-lg);
   max-width: 1200px;
   margin: 0 auto;
-  font-family: var(--font-family-base);
 }
 
 .header {

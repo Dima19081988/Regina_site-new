@@ -2,9 +2,9 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-family-base);
   background: var(--color-bg-public);
   color: var(--color-text-public);
+  --color-primary: var(--color-accent-public);
 }
 
 .header {

@@ -1,14 +1,31 @@
 :root {
-  /* Цвета */
-  --color-primary: #3498db;
-  --color-primary-dark: #2980b9;
-  --color-secondary: #2ecc71;
-  --color-danger: #e74c3c;
-  --color-text: #2c3e50;
-  --color-text-secondary: #7f8c8d;
-  --color-border: #eee;
-  --color-bg: #f8f9fa;
-  --color-white: #ffffff;
+  /* Основные цвета — теперь сиреневые */
+  --color-primary:        #9b59b6;   /* основной акцент (средний сиреневый) */
+  --color-primary-dark:   #8e44ad;   /* для hover, активных состояний */
+  --color-secondary:      #af7ac5;   /* мягкий акцент (светло-сиреневый) */
+  --color-danger:         #e74c3c;   /* оставим красный — он универсален для ошибок */
+
+  /* Текст */
+  --color-text:           #2c3e50;   /* тёмно-серый (хорошо читается) */
+  --color-text-secondary: #7f8c8d;   /* серый для подтекста */
+
+  /* Границы и фоновые элементы */
+  --color-border:         #e0d6eb;   /* очень светлый сиреневый */
+  --color-bg:             #f8f5ff;   /* чуть теплее белого, с лёгким оттенком */
+  --color-white:          #ffffff;
+
+  /* Фоны layout’ов */
+  --color-bg-public:      #faf7ff;   /* почти белый, но с сиреневым подтоном */
+  --color-text-public:    #2c3e50;   /* как основной текст */
+
+  --color-bg-admin:       #dbd0ed;   /* насыщенный тёмно-сиреневый (не чёрный!) */
+  --color-text-admin:     #e6d9f2;   /* мягкий светло-сиреневый, легко читается */
+
+  /* Акценты по контексту */
+  --color-accent-public:  #9b59b6;   /* основной сиреневый */
+  --color-accent-admin:   #af7ac5;   /* светлее для лучшей видимости на тёмном фоне */
+
+
 
   /* Отступы */
   --space-xs: 4px;
@@ -71,7 +88,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   color: var(--color-text);
-  background-color: var(--color-white);
 }
 
 button {

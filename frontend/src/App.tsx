@@ -4,6 +4,8 @@ import AdminLayout from './components/AdminLayout/AdminLayout';
 import Homepage from './pages/Homepage/Homepage';
 import AdminHomepage from './pages/Homepage/AdminHomePage';
 import LoginPage from './pages/Login/LoginPage';
+import PricePage from './pages/PriceList/public/PricePage';
+import AdminPricePage from './pages/PriceList/admin/AdminPricePage';
 import PortfolioPage from './pages/Portfolio/public/PortfolioPage';
 import PortfolioPageAdmin from './pages/Portfolio/admin/PortfolioPageAdmin';
 import PortfolioDetailPage from './pages/Portfolio/public/PortfolioDetailPage';
@@ -34,11 +36,17 @@ function App() {
             <PortfolioDetailPage />
           </PublicLayout>
         } />
+        <Route path="/pricelist" element={
+          <PublicLayout>
+            <PricePage />
+          </PublicLayout>
+        }
+        />
         {/* Админка */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route 
-            path='/admin/' 
+            path="/admin/" 
             element={
               <AdminLayout title='Начальная страница админа'>
                 <AdminHomepage />
@@ -65,6 +73,14 @@ function App() {
                 <PortfolioEditPageAdmin />
               </AdminLayout>
             } />
+          <Route
+            path="/admin/pricelist"
+            element={
+              <AdminLayout title='Прайслист'>
+                <AdminPricePage />
+              </AdminLayout>
+            }
+          />
           <Route 
             path="/admin/appointments" 
             element={
