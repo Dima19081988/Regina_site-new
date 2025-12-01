@@ -5,6 +5,7 @@ import Homepage from './pages/Homepage/Homepage';
 import AdminHomepage from './pages/Homepage/AdminHomePage';
 import LoginPage from './pages/Login/LoginPage';
 import PricePage from './pages/PriceList/public/PricePage';
+import TrendDetailPage from './components/TrendSection/TrendDetailPage';
 import AdminPricePage from './pages/PriceList/admin/AdminPricePage';
 import PortfolioPage from './pages/Portfolio/public/PortfolioPage';
 import PortfolioPageAdmin from './pages/Portfolio/admin/PortfolioPageAdmin';
@@ -40,8 +41,12 @@ function App() {
           <PublicLayout>
             <PricePage />
           </PublicLayout>
-        }
-        />
+        } />
+        <Route path="/trends/:slug" element={
+          <PublicLayout>
+            <TrendDetailPage />
+          </PublicLayout>
+        } />
         {/* Админка */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>

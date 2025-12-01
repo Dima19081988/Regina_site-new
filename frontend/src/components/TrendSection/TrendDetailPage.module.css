@@ -1,0 +1,30 @@
+.detail {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail h1 {
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.content {
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.link {
+  display: inline-block;
+  color: var(--color-primary);
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
