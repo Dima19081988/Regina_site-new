@@ -13,7 +13,7 @@
 }
 
 .reminders {
-  background: var(--color-bg);
+  background: var(--color-bg-admin);
   padding: var(--space-md);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-lg);
@@ -42,12 +42,12 @@
 }
 
 .reminder--tomorrow {
-  color: var(--color-primary);
+  color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
 
 .reminder--after-tomorrow {
-  color: var(--color-secondary);
+  color: var(--color-text);
   font-weight: var(--font-weight-medium);
 }
 

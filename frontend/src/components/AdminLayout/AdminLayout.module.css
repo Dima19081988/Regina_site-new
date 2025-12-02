@@ -1,6 +1,6 @@
 .admin-layout {
   min-height: 100vh;
-  background: var(--color-bg-admin);
+  background: var(--color-bg);
   color: var(--color-text-admin);
   --color-primary: var(--color-accent-admin);
   padding: var(--space-lg);

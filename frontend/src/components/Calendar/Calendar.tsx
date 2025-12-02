@@ -11,6 +11,16 @@ export default function Calendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
+  const isToday = (year: number, month: number, day: number | null): boolean => {
+    if (day === null) return false;
+    const today = new Date();
+    return (
+      today.getFullYear() === year &&
+      today.getMonth() === month && 
+      today.getDate() === day
+    );
+  };
+
   useEffect(() => {
     const handleResize = () => {
       setViewMode(window.innerWidth < 768 ? 'list' : 'grid');
@@ -80,12 +90,17 @@ export default function Calendar() {
         const dayStr = localDate.toISOString().split('T')[0];
         const count = counts[dayStr] || 0;
         const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
+        const isCurrentDay = isToday(year, month, day);
 
 
         return (
           <div
             key={index}
-            className={`${styles.day} ${count > 0 ? styles['day--has-appointments'] : ''}`}
+            className={`
+              ${styles.day} 
+              ${count > 0 ? styles['day--has-appointments'] : ''}}
+              ${isCurrentDay ? styles['day__today'] : ''}
+            `.trim()}
             onClick={() => handleDayClick(day)}
           >
             <div className={styles['day__number']}>{day}</div>
@@ -106,11 +121,15 @@ export default function Calendar() {
         const dateStr = localDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
         const count = counts[dateStr] || 0;  
         const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
+        const isCurrentDay = isToday(year, month, day);
 
         return (
           <div
             key={index}
-            className={styles['appointment-item']}
+            className={`
+              ${styles['appointment-item']}
+              ${isCurrentDay ? styles['appointment-item__today'] : ''}
+            `.trim()}
             onClick={() => handleDayClick(day)}
           >
             <div className={styles['appointment-header']}>
