@@ -1,3 +1,4 @@
+
 import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
 import { s3Client } from '../config/s3Client';
@@ -125,3 +126,135 @@ export const deleteFileFromS3 = async (key: string): Promise<void> => {
   await s3Client.send(command);
   console.log(`✅ Файл удалён из облака: ${key}`);
 };
+
+
+// import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+// import { v4 as uuidv4 } from 'uuid';
+// import { s3Client } from '../config/s3Client';
+// import path from 'path';
+// import crypto from 'crypto';
+// import { getYdbSession } from '../config/ydb-client'; // ← подключение к YDB
+
+// const BUCKET_NAME = process.env.S3_BUCKET?.trim();
+// if (!BUCKET_NAME) {
+//   throw new Error('S3_BUCKET не задан в .env');
+// }
+
+// const ALLOWED_EXTENSIONS = new Set([
+//   '.jpg',
+//   '.jpeg',
+//   '.png',
+//   '.webp',
+//   '.gif',
+//   '.txt',
+//   '.pdf',
+//   '.doc',
+//   '.docx',
+// ]);
+
+// const ALLOWED_FOLDERS = new Set(['portfolio/images', 'portfolio/documents', 'files']);
+
+// const getMimeType = (ext: string): string => {
+//   switch (ext) {
+//     case '.jpg':
+//     case '.jpeg':
+//       return 'image/jpeg';
+//     case '.png':
+//       return 'image/png';
+//     case '.webp':
+//       return 'image/webp';
+//     case '.gif':
+//       return 'image/gif';
+//     case '.txt':
+//       return 'text/plain';
+//     case '.pdf':
+//       return 'application/pdf';
+//     case '.doc':
+//       return 'application/msword';
+//     case '.docx':
+//       return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+//     default:
+//       return 'application/octet-stream';
+//   }
+// };
+
+// export const getFileHash = (buffer: Buffer): string => {
+//   return crypto.createHash('sha256').update(buffer).digest('hex');
+// };
+
+// export const uploadFileToS3 = async (
+//   fileBuffer: Buffer,
+//   originalName: string,
+//   folder: string = 'portfolio/images'
+// ): Promise<string> => {
+//   if (fileBuffer.length === 0) {
+//     throw new Error('Файл не должен быть пустым');
+//   }
+//   if (!originalName || typeof originalName !== 'string') {
+//     throw new Error('Имя файла обязательно');
+//   }
+
+//   const fileExtension = path.extname(originalName).toLowerCase();
+//   if (!ALLOWED_EXTENSIONS.has(fileExtension)) {
+//     throw new Error(
+//       `Недопустимый тип файла ${fileExtension}. Разрешены ${[...ALLOWED_EXTENSIONS].join(', ')}`
+//     );
+//   }
+//   if (!ALLOWED_FOLDERS.has(folder)) {
+//     throw new Error(`Недопустимая папка ${folder}. Разрешены: ${[...ALLOWED_FOLDERS].join(', ')}`);
+//   }
+
+//   // 🔍 Проверка дубликата через YDB
+//   const fileHash = getFileHash(fileBuffer);
+//   const session = await getYdbSession();
+//   const hashCheck = await session.executeQuery(
+//     'SELECT 1 FROM file_hashes WHERE hash = $1',
+//     [fileHash]
+//   );
+//   const hashExists = hashCheck.resultSets[0].rows.length > 0;
+//   await session.delete();
+
+//   if (hashExists) {
+//     throw new Error('Файл с таким содержимым уже был загружен');
+//   }
+
+//   // 📤 Загрузка в S3
+//   const uniqueFileName = `${uuidv4()}${fileExtension}`;
+//   const key = `${folder}/${uniqueFileName}`;
+//   const mimeType = getMimeType(fileExtension);
+
+//   const command = new PutObjectCommand({
+//     Bucket: BUCKET_NAME,
+//     Key: key,
+//     Body: fileBuffer,
+//     ContentType: mimeType,
+//     ACL: 'public-read',
+//   });
+
+//   await s3Client.send(command);
+
+//   // 💾 Сохранение хеша в YDB
+//   const saveSession = await getYdbSession();
+//   await saveSession.executeQuery(
+//     'INSERT INTO file_hashes (hash) VALUES ($1)',
+//     [fileHash]
+//   );
+//   await saveSession.delete();
+
+//   return `https://${BUCKET_NAME}.storage.yandexcloud.net/${key}`;
+// };
+
+// export const deleteFileFromS3 = async (key: string): Promise<void> => {
+//   if (!key) {
+//     throw new Error('Ключ файла не может быть пустым');
+//   }
+
+//   const command = new DeleteObjectCommand({
+//     Bucket: BUCKET_NAME,
+//     Key: key,
+//   });
+
+//   await s3Client.send(command);
+//   console.log(`✅ Файл удалён из облака: ${key}`);
+// };
+

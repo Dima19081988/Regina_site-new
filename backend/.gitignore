@@ -1,5 +1,5 @@
 .env
-
+dist
 # Security scripts
 generate-hash.ts
 temp-*.tsgenerate-hash.ts
