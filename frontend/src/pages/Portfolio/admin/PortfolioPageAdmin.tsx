@@ -4,6 +4,8 @@ import styles from './PortfolioPageAdmin.module.css';
 import PortfolioUploadForm from '../../../components/Portfolio/PortfolioUploadForm/PortfolioUploadForm';
 import { Link } from 'react-router-dom';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function PortfolioPageAdmin() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ export default function PortfolioPageAdmin() {
   const fetchPortfolio = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/portfolio', {
+      const response = await fetch(`${API_BASE}/api/portfolio`, {
         credentials: 'include',
       });
 
@@ -36,7 +38,7 @@ export default function PortfolioPageAdmin() {
   const handleDelete = async (id: number) => {
     if (!confirm('Удалить работу?')) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/portfolio/${id}`, {
+      const response = await fetch(`${API_BASE}/api/portfolio/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -68,10 +70,16 @@ export default function PortfolioPageAdmin() {
           {portfolio.map((item) => (
             <Link key={item.id} to={`/admin/portfolio/${item.id}`} className={styles.cardLink}>
               <div className={styles.card}>
-                <img src={item.image_url} alt={item.title || 'Работа'} className={styles.cardImage} />
+                <img
+                  src={item.image_url}
+                  alt={item.title || 'Работа'}
+                  className={styles.cardImage}
+                />
                 <div className={styles.cardContent}>
                   <h3 className={styles.cardTitle}>{item.title}</h3>
-                  {item.category && <p className={styles.cardCategory}>Категория: {item.category}</p>}
+                  {item.category && (
+                    <p className={styles.cardCategory}>Категория: {item.category}</p>
+                  )}
                   <button
                     type="button"
                     className={styles.deleteButton}

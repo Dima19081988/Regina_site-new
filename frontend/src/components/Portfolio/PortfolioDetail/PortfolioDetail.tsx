@@ -8,11 +8,11 @@ export interface PortfolioDetailProps {
 export default function PortfolioDetail({ item }: PortfolioDetailProps) {
   return (
     <div className={styles.container}>
-      <img 
-        src={item.image_url} 
-        alt={item.title || 'Работа'} 
+      <img
+        src={item.image_url}
+        alt={item.title || 'Работа'}
         className={styles.image}
-        loading='lazy'
+        loading="lazy"
       />
       <h1 className={styles.title}>{item.title}</h1>
       {item.description && <p className={styles.description}>{item.description}</p>}

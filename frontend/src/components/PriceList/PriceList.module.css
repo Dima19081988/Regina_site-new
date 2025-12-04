@@ -78,7 +78,7 @@
     padding: var(--space-sm);
     font-size: var(--font-size-sm);
     text-align: center;
-    word-wrap: break-word;;
+    word-wrap: break-word;
   }
 
   .pricelistTable th {

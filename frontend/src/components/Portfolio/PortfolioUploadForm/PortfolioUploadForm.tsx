@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styles from './PortfolioUploadForm.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 interface PortfolioUploadFormProps {
   onUploadSuccess: () => void;
 }
@@ -28,7 +30,7 @@ export default function PortfolioUploadForm({ onUploadSuccess }: PortfolioUpload
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/portfolio', {
+      const response = await fetch(`${API_BASE}/api/portfolio`, {
         method: 'POST',
         credentials: 'include',
         body: formData,

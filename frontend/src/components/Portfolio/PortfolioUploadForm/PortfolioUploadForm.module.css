@@ -59,7 +59,9 @@
   border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: var(--font-weight-bold);
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .form button:hover:not(:disabled) {
@@ -90,4 +92,3 @@
     margin-top: var(--space-sm);
   }
 }
-

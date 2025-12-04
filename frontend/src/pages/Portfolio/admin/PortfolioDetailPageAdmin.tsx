@@ -4,6 +4,8 @@ import type { PortfolioItem } from '../../../types';
 import PortfolioDetail from '../../../components/Portfolio/PortfolioDetail/PortfolioDetail';
 import styles from './PortfolioDetailPageAdmin.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function PortfolioDetailPageAdmin() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ export default function PortfolioDetailPageAdmin() {
 
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/portfolio/${id}`, {
+        const response = await fetch(`${API_BASE}/api/portfolio/${id}`, {
           credentials: 'include',
         });
         if (!response.ok) {
@@ -40,7 +42,7 @@ export default function PortfolioDetailPageAdmin() {
   const handleDelete = async () => {
     if (!confirm('Действительно удалить работу')) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/portfolio/${id}`, {
+      const response = await fetch(`${API_BASE}/api/portfolio/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -77,11 +79,7 @@ export default function PortfolioDetailPageAdmin() {
           Назад
         </button>
       </div>
-      {item ? (
-        <PortfolioDetail item={item} />
-      ) : (
-        <p>Загрузка...</p>
-      )}
+      {item ? <PortfolioDetail item={item} /> : <p>Загрузка...</p>}
     </div>
   );
 }

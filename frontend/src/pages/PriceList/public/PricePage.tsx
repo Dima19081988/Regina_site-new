@@ -1,5 +1,5 @@
-import PriceList from "../../../components/PriceList/PriceList";
+import PriceList from '../../../components/PriceList/PriceList';
 
 export default function PricePage() {
-    return <PriceList />;
+  return <PriceList />;
 }

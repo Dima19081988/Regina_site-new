@@ -1,31 +1,29 @@
 :root {
   /* Основные цвета — теперь сиреневые */
-  --color-primary:        #9b59b6;   /* основной акцент (средний сиреневый) */
-  --color-primary-dark:   #8e44ad;   /* для hover, активных состояний */
-  --color-secondary:      #af7ac5;   /* мягкий акцент (светло-сиреневый) */
-  --color-danger:         #e74c3c;   /* оставим красный — он универсален для ошибок */
+  --color-primary: #9b59b6; /* основной акцент (средний сиреневый) */
+  --color-primary-dark: #8e44ad; /* для hover, активных состояний */
+  --color-secondary: #af7ac5; /* мягкий акцент (светло-сиреневый) */
+  --color-danger: #e74c3c; /* оставим красный — он универсален для ошибок */
 
   /* Текст */
-  --color-text:           #2c3e50;   /* тёмно-серый (хорошо читается) */
-  --color-text-secondary: #7f8c8d;   /* серый для подтекста */
+  --color-text: #2c3e50; /* тёмно-серый (хорошо читается) */
+  --color-text-secondary: #7f8c8d; /* серый для подтекста */
 
   /* Границы и фоновые элементы */
-  --color-border:         #d0c0e0;   /* очень светлый сиреневый */
-  --color-bg:             #f8f5ff;   /* чуть теплее белого, с лёгким оттенком */
-  --color-white:          #ffffff;
+  --color-border: #d0c0e0; /* очень светлый сиреневый */
+  --color-bg: #f8f5ff; /* чуть теплее белого, с лёгким оттенком */
+  --color-white: #ffffff;
 
   /* Фоны layout’ов */
-  --color-bg-public:      #faf7ff;   /* почти белый, но с сиреневым подтоном */
-  --color-text-public:    #2c3e50;   /* как основной текст */
+  --color-bg-public: #faf7ff; /* почти белый, но с сиреневым подтоном */
+  --color-text-public: #2c3e50; /* как основной текст */
 
-  --color-bg-admin:       #dbd0ed;   /* насыщенный тёмно-сиреневый (не чёрный!) */
-  --color-text-admin:     #e6d9f2;   /* мягкий светло-сиреневый, легко читается */
+  --color-bg-admin: #dbd0ed; /* насыщенный тёмно-сиреневый (не чёрный!) */
+  --color-text-admin: #e6d9f2; /* мягкий светло-сиреневый, легко читается */
 
   /* Акценты по контексту */
-  --color-accent-public:  #9b59b6;   /* основной сиреневый */
-  --color-accent-admin:   #9e7fac;   /* светлее для лучшей видимости на тёмном фоне */
-
-
+  --color-accent-public: #9b59b6; /* основной сиреневый */
+  --color-accent-admin: #9e7fac; /* светлее для лучшей видимости на тёмном фоне */
 
   /* Отступы */
   --space-xs: 4px;
@@ -96,7 +94,10 @@ button {
   outline: none;
 }
 
-input, button, select, textarea {
+input,
+button,
+select,
+textarea {
   font-family: inherit;
   font-size: 100%;
 }

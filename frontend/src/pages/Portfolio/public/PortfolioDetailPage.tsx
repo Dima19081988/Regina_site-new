@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import type { PortfolioItem } from '../../../types';
-import PortfolioDetail from '../../../components/Portfolio/PortfolioDetail/PortfolioDetail'; 
+import PortfolioDetail from '../../../components/Portfolio/PortfolioDetail/PortfolioDetail';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function PortfolioDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +19,7 @@ export default function PortfolioDetailPage() {
     }
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/portfolio/${id}`);
+        const response = await fetch(`${API_BASE}/api/portfolio/${id}`);
         if (!response.ok) {
           throw new Error('Работа не найдена');
         }

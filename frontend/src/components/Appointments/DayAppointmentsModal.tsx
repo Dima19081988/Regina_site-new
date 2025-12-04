@@ -6,6 +6,7 @@ interface DayAppointmentsModalProps {
   date: string;
   onClose: () => void;
 }
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsModalProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -22,7 +23,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
   useEffect(() => {
     const loadAppointments = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/appointments/date/${date}`, {
+        const response = await fetch(`${API_BASE}/api/appointments/date/${date}`, {
           credentials: 'include',
         });
         if (response.ok) {
@@ -48,7 +49,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
     const priceNum = currentAppointment.price ? parseFloat(currentAppointment.price) : null;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/appointments`, {
+      const response = await fetch(`${API_BASE}/api/appointments`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -78,8 +79,8 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
     const time = new Date(appointment.appointment_time).toTimeString().slice(0, 5);
     setCurrentAppointment({
       time: time,
-      client_name: currentAppointment.client_name,
-      service: currentAppointment.service,
+      client_name: appointment.client_name,
+      service: appointment.service,
       price: appointment.price ? String(appointment.price) : '',
     });
     setEditingId(appointment.id);
@@ -93,7 +94,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
     const priceNum = currentAppointment.price ? parseFloat(currentAppointment.price) : null;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/appointments/${editingId}`, {
+      const response = await fetch(`${API_BASE}/api/appointments/${editingId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -122,7 +123,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
   const handleDelete = async (id: number) => {
     if (!confirm('Удалить запись?')) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/appointments/${id}`, {
+      const response = await fetch(`${API_BASE}/api/appointments/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

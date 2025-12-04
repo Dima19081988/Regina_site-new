@@ -51,7 +51,9 @@
   padding: var(--space-sm) var(--space-md);
   border: 2px solid var(--color-primary);
   border-radius: var(--radius-xl);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
   display: inline-block;
 }
 

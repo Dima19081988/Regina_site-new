@@ -4,6 +4,8 @@ import Calendar from '../../../components/Calendar/Calendar';
 import { pluralize } from '../../../utils/pluralize';
 import styles from './AppointmentsPageAdmin.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function AppointmentsPageAdmin() {
   const [today, setToday] = useState<Appointment[]>([]);
   const [tomorrow, setTomorrow] = useState<Appointment[]>([]);
@@ -12,9 +14,9 @@ export default function AppointmentsPageAdmin() {
   useEffect(() => {
     const loadReminders = async () => {
       const [todayRes, tomorrowRes, afterTomorrowRes] = await Promise.all([
-        fetch('http://localhost:3000/api/appointments/today', { credentials: 'include' }),
-        fetch('http://localhost:3000/api/appointments/tomorrow', { credentials: 'include' }),
-        fetch('http://localhost:3000/api/appointments/after-tomorrow', { credentials: 'include' }),
+        fetch(`${API_BASE}/api/appointments/today`, { credentials: 'include' }),
+        fetch(`${API_BASE}/api/appointments/tomorrow`, { credentials: 'include' }),
+        fetch(`${API_BASE}/api/appointments/after-tomorrow`, { credentials: 'include' }),
       ]);
       setToday(await todayRes.json());
       setTomorrow(await tomorrowRes.json());

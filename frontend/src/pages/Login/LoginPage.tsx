@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../api/authApi';
 import styles from './LoginPage.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -11,13 +13,13 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth().then(isAuth => {
+    checkAuth().then((isAuth) => {
       if (isAuth) {
         navigate('/admin/appointments', { replace: true });
       }
       setCheckingAuth(false);
     });
-  }, []);
+  }, [navigate]);
 
   if (checkingAuth) {
     return <div>Проверка сессии...</div>;
@@ -29,7 +31,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

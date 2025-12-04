@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import type { PortfolioItem } from '../../../types';
 import styles from './PortfolioEditPageAdmin.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function PortfolioEditPageAdmin() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ export default function PortfolioEditPageAdmin() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`http://localhost:3000/api/portfolio/${id}`, {
+    fetch(`${API_BASE}/api/portfolio/${id}`, {
       credentials: 'include',
     })
       .then((res) => res.json())
@@ -43,7 +45,7 @@ export default function PortfolioEditPageAdmin() {
     if (file) formData.append('image', file);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/portfolio/${id}`, {
+      const response = await fetch(`${API_BASE}/api/portfolio/${id}`, {
         method: 'PUT',
         credentials: 'include',
         body: formData,

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import DayAppointmentsModal from '../Appointments/DayAppointmentsModal';
 import styles from './Calendar.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -14,11 +16,7 @@ export default function Calendar() {
   const isToday = (year: number, month: number, day: number | null): boolean => {
     if (day === null) return false;
     const today = new Date();
-    return (
-      today.getFullYear() === year &&
-      today.getMonth() === month && 
-      today.getDate() === day
-    );
+    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
   };
 
   useEffect(() => {
@@ -33,10 +31,9 @@ export default function Calendar() {
 
   useEffect(() => {
     const loadCounts = async () => {
-      const response = await fetch(
-        `http://localhost:3000/api/appointments/counts/${year}/${month + 1}`,
-        { credentials: 'include' }
-      );
+      const response = await fetch(`${API_BASE}/api/appointments/counts/${year}/${month + 1}`, {
+        credentials: 'include',
+      });
       if (response.ok) {
         const data = await response.json();
         setCounts(data);
@@ -83,7 +80,7 @@ export default function Calendar() {
     <div className={styles['days-grid']}>
       {days.map((day, index) => {
         if (day === null) {
-          return <div key={index} className={styles.emptyDay}></div>
+          return <div key={index} className={styles.emptyDay}></div>;
         }
 
         const localDate = new Date(year, month, day);
@@ -91,7 +88,6 @@ export default function Calendar() {
         const count = counts[dayStr] || 0;
         const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
         const isCurrentDay = isToday(year, month, day);
-
 
         return (
           <div
@@ -119,7 +115,7 @@ export default function Calendar() {
 
         const localDate = new Date(year, month, day);
         const dateStr = localDate.toISOString().split('T')[0]; // 'YYYY-MM-DD'
-        const count = counts[dateStr] || 0;  
+        const count = counts[dateStr] || 0;
         const dayOfWeek = localDate.toLocaleDateString('ru-RU', { weekday: 'short' });
         const isCurrentDay = isToday(year, month, day);
 

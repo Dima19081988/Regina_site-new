@@ -115,14 +115,16 @@
   border-radius: var(--radius-md);
   font-size: var(--font-size-md);
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition:
+    background 0.2s,
+    transform 0.1s;
 }
 
 .formActions button:hover {
   transform: translateY(-1px);
 }
 
-.formActions button[type="submit"] {
+.formActions button[type='submit'] {
   background: var(--color-primary);
   color: var(--color-white);
   border: none;

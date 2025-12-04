@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import type { Note } from '../../types';
 import styles from './AdminNotesPage.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function AdminNotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ export default function AdminNotesPage() {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/notes', {
+        const response = await fetch(`${API_BASE}/api/notes`, {
           credentials: 'include',
         });
         if (!response.ok) {
@@ -38,9 +40,7 @@ export default function AdminNotesPage() {
     setSubmitting(true);
 
     const method = editingId ? 'PUT' : 'POST';
-    const url = editingId
-      ? `http://localhost:3000/api/notes/${editingId}`
-      : 'http://localhost:3000/api/notes';
+    const url = editingId ? `${API_BASE}/api/notes/${editingId}` : `${API_BASE}/api/notes`;
 
     try {
       const response = await fetch(url, {
@@ -75,7 +75,7 @@ export default function AdminNotesPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Удалить заметку?')) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/notes/${id}`, {
+      const response = await fetch(`${API_BASE}/api/notes/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

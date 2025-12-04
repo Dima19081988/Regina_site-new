@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import type { FileItem } from '../../types';
 import styles from './AdminFilesPage.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function AdminFilesPage() {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ export default function AdminFilesPage() {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/files', {
+        const response = await fetch(`${API_BASE}/api/files`, {
           credentials: 'include',
         });
         if (!response.ok) throw new Error('Нет доступа к файлам');
@@ -46,7 +48,7 @@ export default function AdminFilesPage() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:3000/api/files', {
+      const response = await fetch(`${API_BASE}/api/files`, {
         method: 'POST',
         credentials: 'include',
         body: formData,
@@ -72,7 +74,7 @@ export default function AdminFilesPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Удалить файл?')) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/files/${id}`, {
+      const response = await fetch(`${API_BASE}/api/files/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

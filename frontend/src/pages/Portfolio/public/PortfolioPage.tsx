@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import PortfolioCard from '../../../components/Portfolio/PortfolioCard/PortfolioCard';
 import styles from './PortfolioPage.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function PortfolioPage() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/portfolio');
+        const response = await fetch(`${API_BASE}/api/portfolio`);
         if (!response.ok) {
           throw new Error('Не удалось загрузить портфолио');
         }

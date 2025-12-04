@@ -22,91 +22,113 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Публичные страницы */}
-        <Route path="/" element={
-          <PublicLayout>
-            <Homepage />
-          </PublicLayout>
-        } />
-        <Route path="/portfolio" element={
-          <PublicLayout>
-            <PortfolioPage />
-          </PublicLayout>
-        } />
-        <Route path="/portfolio/:id" element={
-          <PublicLayout>
-            <PortfolioDetailPage />
-          </PublicLayout>
-        } />
-        <Route path="/pricelist" element={
-          <PublicLayout>
-            <PricePage />
-          </PublicLayout>
-        } />
-        <Route path="/trends/:slug" element={
-          <PublicLayout>
-            <TrendDetailPage />
-          </PublicLayout>
-        } />
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Homepage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/portfolio"
+          element={
+            <PublicLayout>
+              <PortfolioPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/portfolio/:id"
+          element={
+            <PublicLayout>
+              <PortfolioDetailPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/pricelist"
+          element={
+            <PublicLayout>
+              <PricePage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/trends/:slug"
+          element={
+            <PublicLayout>
+              <TrendDetailPage />
+            </PublicLayout>
+          }
+        />
         {/* Админка */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route 
-            path="/admin/" 
+          <Route
+            path="/admin/"
             element={
-              <AdminLayout title='Начальная страница админа'>
+              <AdminLayout title="Начальная страница админа">
                 <AdminHomepage />
               </AdminLayout>
-            }/>
-          <Route 
-            path="/admin/portfolio" 
+            }
+          />
+          <Route
+            path="/admin/portfolio"
             element={
-              <AdminLayout title='Портфолио'>
+              <AdminLayout title="Портфолио">
                 <PortfolioPageAdmin />
               </AdminLayout>
-            } />
-          <Route 
-            path="/admin/portfolio/:id" 
+            }
+          />
+          <Route
+            path="/admin/portfolio/:id"
             element={
-              <AdminLayout title=''>
+              <AdminLayout title="">
                 <PortfolioDetailPageAdmin />
               </AdminLayout>
-            } />
-          <Route 
-            path="/admin/portfolio/:id/edit" 
+            }
+          />
+          <Route
+            path="/admin/portfolio/:id/edit"
             element={
-              <AdminLayout title='Изменить работу'>
+              <AdminLayout title="Изменить работу">
                 <PortfolioEditPageAdmin />
               </AdminLayout>
-            } />
+            }
+          />
           <Route
             path="/admin/pricelist"
             element={
-              <AdminLayout title='Прайслист'>
+              <AdminLayout title="Прайслист">
                 <AdminPricePage />
               </AdminLayout>
             }
           />
-          <Route 
-            path="/admin/appointments" 
+          <Route
+            path="/admin/appointments"
             element={
-              <AdminLayout title='Записи'>
+              <AdminLayout title="Записи">
                 <AppointmentsPageAdmin />
               </AdminLayout>
-            } />
-          <Route 
-            path="/admin/notes" 
+            }
+          />
+          <Route
+            path="/admin/notes"
             element={
-              <AdminLayout title='Заметки'>
+              <AdminLayout title="Заметки">
                 <AdminNotesPage />
               </AdminLayout>
-            } />
-          <Route 
-            path="/admin/files" 
+            }
+          />
+          <Route
+            path="/admin/files"
             element={
-              <AdminLayout title='Файлы'>
+              <AdminLayout title="Файлы">
                 <AdminFilesPage />
               </AdminLayout>
-            } />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
