@@ -63,7 +63,6 @@ export const deleteNote = async (id: number): Promise<boolean> => {
   return (result.rowCount || 0) > 0;
 };
 
-
 // import { getYdbSession } from '../config/ydb-client';
 // import { Note } from '../models/types/Notes';
 
@@ -168,4 +167,3 @@ export const deleteNote = async (id: number): Promise<boolean> => {
 
 //   return exists;
 // };
-

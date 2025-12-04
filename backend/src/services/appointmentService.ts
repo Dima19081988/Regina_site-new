@@ -112,7 +112,6 @@ export const deleteAppointment = async (id: number): Promise<boolean> => {
   return (result.rowCount || 0) > 0;
 };
 
-
 // import { getYdbSession } from '../config/ydb-client';
 // import { Appointment } from '../models/types/Apointments';
 
@@ -272,5 +271,3 @@ export const deleteAppointment = async (id: number): Promise<boolean> => {
 
 //   return exists;
 // };
-
-

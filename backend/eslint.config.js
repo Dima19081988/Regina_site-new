@@ -24,6 +24,10 @@ export default defineConfig([
       ...tsPlugin.configs.recommended.rules,
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { args: 'after-used', argsIgnorePattern: '^_' },
+      ],
     },
   },
   prettier,

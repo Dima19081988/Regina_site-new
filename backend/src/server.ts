@@ -38,7 +38,7 @@ app.use('/api/portfolio', portfolioRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/auth', authRouter);
 
-app.use((err: any, req: any, res: any) => {
+app.use((err: any, req: any, res: any, _next: any) => {
   if (err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({ error: 'Файл слишком большой. Максимум — 5 МБ.' });
   }

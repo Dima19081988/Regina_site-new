@@ -1,4 +1,5 @@
 .env
+.env.vps
 dist
 # Security scripts
 generate-hash.ts

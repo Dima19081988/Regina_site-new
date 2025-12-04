@@ -1,4 +1,3 @@
-
 import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
 import { s3Client } from '../config/s3Client';
@@ -126,7 +125,6 @@ export const deleteFileFromS3 = async (key: string): Promise<void> => {
   await s3Client.send(command);
   console.log(`✅ Файл удалён из облака: ${key}`);
 };
-
 
 // import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 // import { v4 as uuidv4 } from 'uuid';
@@ -257,4 +255,3 @@ export const deleteFileFromS3 = async (key: string): Promise<void> => {
 //   await s3Client.send(command);
 //   console.log(`✅ Файл удалён из облака: ${key}`);
 // };
-
