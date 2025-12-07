@@ -50,6 +50,23 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id) || id <= 0) {
+    return res.status(400).json({ error: 'ID должен быть числом' });
+  }
+  try {
+    const fileItem = await getFileItemById(id);
+    if (!fileItem) {
+      return res.status(404).json({ error: 'Файл по ID не найден' });
+    }
+    res.json(fileItem);
+  } catch (err) {
+    console.error('Ошибка:', err);
+    res.status(500).json({ error: 'Ошибка получения файла' });
+  }
+});
+
 router.post('/', requireAuth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
@@ -80,22 +97,6 @@ router.post('/', requireAuth, upload.single('file'), async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (isNaN(id) || id <= 0) {
-    return res.status(400).json({ error: 'ID должен быть числом' });
-  }
-  try {
-    const fileItem = await getFileItemById(id);
-    if (!fileItem) {
-      return res.status(404).json({ error: 'Файл по ID не найден' });
-    }
-    res.json(fileItem);
-  } catch (err) {
-    console.error('Ошибка:', err);
-    res.status(500).json({ error: 'Ошибка получения файла' });
-  }
-});
 
 router.delete('/:id', requireAuth, async (req, res) => {
   const id = Number(req.params.id);

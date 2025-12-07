@@ -14,6 +14,7 @@ import { Portfolio } from '../models/types/Portfolio';
 import { requireAuth } from '../middleware/authMiddleware';
 
 const router = Router();
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -42,6 +43,26 @@ router.get('/', async (req, res) => {
   } catch (err: any) {
     console.error('Ошибка при получении портфолио: ', err);
     res.status(500).json({ error: err.message || 'Не удалось загрузить портфолио' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const portfolioId = Number(id);
+
+  if (isNaN(portfolioId) || portfolioId <= 0) {
+    return res.status(400).json({ error: 'ID должен быть числом' });
+  }
+
+  try {
+    const portfolio = await getPortfolioById(portfolioId);
+    if (!portfolio) {
+      return res.status(404).json({ error: 'Портфолио по ID не найдено' });
+    }
+    res.json(portfolio);
+  } catch (err: any) {
+    console.error('Ошибка при получении портфолио по ID: ', err);
+    res.status(500).json({ error: err.message || 'Не удалось получить портфолио по ID' });
   }
 });
 
@@ -80,26 +101,6 @@ router.post('/', requireAuth, upload.single('image'), async (req, res) => {
     }
 
     res.status(500).json({ error: err.message || 'Не удалось создать запись портфолио' });
-  }
-});
-
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const portfolioId = Number(id);
-
-  if (isNaN(portfolioId) || portfolioId <= 0) {
-    return res.status(400).json({ error: 'ID должен быть числом' });
-  }
-
-  try {
-    const portfolio = await getPortfolioById(portfolioId);
-    if (!portfolio) {
-      return res.status(404).json({ error: 'Портфолио по ID не найдено' });
-    }
-    res.json(portfolio);
-  } catch (err: any) {
-    console.error('Ошибка при получении портфолио по ID: ', err);
-    res.status(500).json({ error: err.message || 'Не удалось получить портфолио по ID' });
   }
 });
 

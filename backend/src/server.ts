@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import { Request, Response, NextFunction } from 'express'; 
 import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
@@ -15,6 +16,8 @@ app.use(
   cors({
     origin: 'http://localhost:5173',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   })
 );
 
@@ -26,7 +29,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // true если используешь HTTPS (в продакшене)
+      secure: false,
       maxAge: 1000 * 60 * 60, // 1 час
     },
   })
@@ -38,21 +41,18 @@ app.use('/api/portfolio', portfolioRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/auth', authRouter);
 
-app.use((err: any, req: any, res: any, _next: any) => {
-  if (err.code === 'LIMIT_FILE_SIZE') {
-    return res.status(400).json({ error: 'Файл слишком большой. Максимум — 5 МБ.' });
-  }
-  if (err.message && err.message.includes('Разрешены только')) {
-    return res.status(400).json({ error: err.message });
-  }
-  console.error('Multer error:', err);
-  res.status(500).json({ error: 'Ошибка при загрузке файла' });
-});
-console.log('✅ Routers connected: appointments, notes, portfolio, files');
-
 app.get('/', (req, res) => {
   res.json({ message: '✅ Backend is running!' });
 });
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('Unhandled error:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+console.log('✅ Routers connected: appointments, notes, portfolio, files');
 
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
