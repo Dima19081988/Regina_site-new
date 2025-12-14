@@ -4,7 +4,6 @@ import styles from './PriceList.module.css';
 export default function PriceList() {
   return (
     <section className={styles.priceList}>
-      <h2>Прайслист</h2>
       {priceListData.map((category) => (
         <div key={category.id} className={styles.pricelistCategory}>
           <h3>{category.title}</h3>

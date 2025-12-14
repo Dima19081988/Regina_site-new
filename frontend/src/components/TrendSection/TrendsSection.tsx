@@ -19,9 +19,13 @@ export default function TrendsSection() {
               duration: 0.5,
               ease: 'easeOut',
             }}
-            className={styles.trendCard}
           >
             <Link to={`/trends/${trend.slug}`} key={trend.id} className={styles.trendCard}>
+              <img
+                src={trend.image}
+                alt={trend.title}
+                className={styles.trendImage}
+              />
               <h3>{trend.title}</h3>
               <p>{trend.shortDescription}</p>
             </Link>

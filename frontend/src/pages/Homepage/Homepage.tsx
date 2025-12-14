@@ -5,8 +5,8 @@ export default function Homepage() {
   return (
     <div className={styles.container}>
       <section className={styles.hero}>
-        <h2>Добро пожаловать!</h2>
-        <p>Профессиональный уход за кожей и инъекционные методики в Москве.</p>
+        <h2></h2>
+        <p></p>
       </section>
       <TrendsSection />
     </div>

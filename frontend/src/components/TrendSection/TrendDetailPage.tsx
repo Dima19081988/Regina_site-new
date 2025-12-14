@@ -12,6 +12,11 @@ export default function TrendDetailPage() {
 
   return (
     <div className={styles.details}>
+      <img
+        src={trend.image}
+        alt={trend.title}
+        className={styles.detailImage}
+      />
       <h1>{trend.title}</h1>
       <div className={styles.content}>
         <p>{trend.fullDescription}</p>

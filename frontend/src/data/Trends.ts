@@ -5,6 +5,7 @@ export interface Trend {
   shortDescription: string;
   fullDescription: string;
   link?: string;
+  image: string;
 }
 
 export const trends: Trend[] = [
@@ -14,14 +15,16 @@ export const trends: Trend[] = [
     title: 'Биоревитализация',
     shortDescription: '',
     fullDescription: '',
+    image: 'https://storage.yandexcloud.net/assets-regina-site/images/trends/biorevitalization.jpg',
   },
 
   {
     id: '2',
     slug: 'fillers',
-    title: 'Филлеры',
+    title: 'Контурная пластика',
     shortDescription: '',
     fullDescription: '',
+    image: 'https://storage.yandexcloud.net/assets-regina-site/images/trends/fillers.jpg',
   },
 
   {
@@ -30,13 +33,15 @@ export const trends: Trend[] = [
     title: 'Ботулотоксины',
     shortDescription: '',
     fullDescription: '',
+    image: 'https://storage.yandexcloud.net/assets-regina-site/images/trends/botoks.jpg',
   },
 
   {
     id: '4',
-    slug: 'mesoterapia',
-    title: 'Мезотерапия',
+    slug: 'machine_cosmetology',
+    title: 'Аппаратная косметология',
     shortDescription: '',
     fullDescription: '',
+    image: 'https://storage.yandexcloud.net/assets-regina-site/images/trends/machines.jpg',
   },
 ];
