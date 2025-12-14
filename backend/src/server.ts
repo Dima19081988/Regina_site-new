@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit'; 
 import { Request, Response, NextFunction } from 'express'; 
 import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
@@ -12,9 +13,28 @@ import authRouter from './routes/auth.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://regina-cosmetology.ru',
+  'https://regina-cosmetology.ru',
+];
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 10,                  // 10 запросов с IP за окно
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -23,13 +43,17 @@ app.use(
 
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev',
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60, // 1 час
     },
   })
@@ -39,7 +63,7 @@ app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
 app.use('/api/files', filesRouter);
-app.use('/api/auth', authRouter);
+app.use('/api/auth', authLimiter, authRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: '✅ Backend is running!' });
