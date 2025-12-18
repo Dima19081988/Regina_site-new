@@ -10,7 +10,7 @@ interface PortfolioUploadFormProps {
 export default function PortfolioUploadForm({ onUploadSuccess }: PortfolioUploadFormProps) {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [description, setDescriptiom] = useState('');
+  const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +39,7 @@ export default function PortfolioUploadForm({ onUploadSuccess }: PortfolioUpload
         alert('Работа успешно добавлена в портфолио');
         setTitle('');
         setCategory('');
-        setDescriptiom('');
+        setDescription('');
         setFile(null);
         onUploadSuccess();
       } else {
@@ -67,7 +67,7 @@ export default function PortfolioUploadForm({ onUploadSuccess }: PortfolioUpload
       </div>
       <div className={styles.formGroup}>
         <label>Описание</label>
-        <textarea value={description} onChange={(e) => setDescriptiom(e.target.value)} />
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
       </div>
       <div className={styles.formGroup}>
         <label>Изображение</label>

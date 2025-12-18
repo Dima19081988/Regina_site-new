@@ -12,6 +12,27 @@
   text-align: center;
 }
 
+.categorySection {
+  margin-bottom: var(--space-xl);
+}
+
+.categoryTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: var(--space-lg) 0 var(--space-md) 0;
+  padding-bottom: var(--space-sm);
+  border-bottom: 3px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.categoryTitle::before {
+  content: "📁";
+  font-size: var(--font-size-lg);
+}
+
 .emptyMessage {
   text-align: center;
   color: var(--color-text-secondary);
@@ -37,6 +58,12 @@
     margin-bottom: var(--space-md);
   }
 
+  .categoryTitle {
+    font-size: var(--font-size-lg);
+    margin: var(--space-md) 0 var(--space-sm) 0;
+    padding-bottom: var(--space-xs);
+  }
+  
   .cardGrid {
     grid-template-columns: 1fr;
     gap: var(--space-md);
