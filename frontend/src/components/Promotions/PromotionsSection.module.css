@@ -1,0 +1,126 @@
+.promotionsSection {
+  padding: calc(var(--space-xl) * 2) 0;
+  background: linear-gradient(135deg, var(--color-bg-public) 0%, #f0e8ff 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: var(--font-size-xl-desktop);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: calc(var(--space-xl) * 1.5);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.promotionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-xl);
+}
+
+.promoCard {
+  background: var(--color-white);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 12px 40px rgba(155, 89, 182, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.promoCard:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 24px 60px rgba(155, 89, 182, 0.25);
+  border-color: var(--color-primary);
+}
+
+.promoBadge {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  color: var(--color-white);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm-desktop);
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.promoTitle {
+  font-size: var(--font-size-lg-desktop);
+  color: var(--color-text);
+  margin: var(--space-lg) 0 var(--space-md) 0;
+  font-weight: var(--font-weight-bold);
+}
+
+.promoDescription {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md-desktop);
+  margin-bottom: var(--space-lg);
+  line-height: 1.6;
+}
+
+.priceContainer {
+  margin: var(--space-lg) 0;
+}
+
+.oldPrice {
+  font-size: var(--font-size-sm-desktop);
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  margin-bottom: var(--space-xs);
+}
+
+.newPrice {
+  font-size: var(--font-size-xl-desktop);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.validUntil {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm-desktop);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-lg);
+}
+
+.promoButton {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--color-white);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md-desktop);
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+}
+
+.promoButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(155, 89, 182, 0.4);
+}
+
+/* Мобильные */
+@media (max-width: 768px) {
+  .promotionsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg-mobile);
+  }
+}

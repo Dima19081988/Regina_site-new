@@ -6,7 +6,7 @@
   color: var(--color-text);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--color-primary);
-  border-radius: 5%;
+  border-radius: 12px;
   backdrop-filter: blur(10px) brightness(90%);
 }
 
@@ -49,7 +49,6 @@
 .nav a:hover,
 .nav .adminLink:hover {
   background: #3498db;
-  /* color: white; */
 }
 
 .hero {
@@ -102,9 +101,7 @@
 }
 
 @media (max-width: 767px) {
-  .hero::before {
-    background-image: url('/images/bg-public-mobil.jpg');
-    background-size: contain;
-    opacity: 0.6;
+  .hero {
+    display: none;
   }
 }

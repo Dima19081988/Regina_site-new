@@ -14,13 +14,19 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
           Regina — косметолог
         </Link>
         <nav className={styles.nav}>
+          <Link to="/promotions" className={styles.navLink}>
+            !!!Акции!!!
+          </Link>
+          <Link to="/about" className={styles.navLink}>
+            О себе
+          </Link>
           <Link to="/portfolio" className={styles.navLink}>
             Портфолио
           </Link>
           <Link to="/pricelist" className={styles.navLink}>
             Прайслист
           </Link>
-          <a href="tel:+79001234567" className={styles.navLink}>
+          <a href="/contacts" className={styles.navLink}>
             Контакты
           </a>
           <Link to="/admin/login" className={styles.adminLink}>

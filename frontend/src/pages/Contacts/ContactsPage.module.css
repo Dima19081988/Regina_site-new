@@ -1,0 +1,110 @@
+.pageContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+  background: var(--color-bg-public);
+  min-height: 80vh;
+}
+
+.pageTitle {
+  text-align: center;
+  font-size: var(--font-size-xl-desktop);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-xl);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contactSection {
+  background: var(--color-white);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(155, 89, 182, 0.15);
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.contactColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.contactColumn h2 {
+  font-size: var(--font-size-lg-desktop);
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.contactItem {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.contactItem:hover {
+  background: var(--color-bg-public);
+  border-color: var(--color-primary);
+  transform: translateX(4px);
+}
+
+.icon {
+  font-size: 2.2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  flex-shrink: 0;
+}
+
+.contactItem h3 {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-text);
+  font-size: var(--font-size-md-desktop);
+  font-weight: var(--font-weight-medium);
+}
+
+.contactItem a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md-desktop);
+  display: block;
+}
+
+.contactItem a:hover {
+  text-decoration: underline;
+}
+
+.contactItem p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md-desktop);
+}
+
+/* Мобильные */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: var(--space-lg-mobile);
+  }
+  
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg-mobile);
+  }
+}

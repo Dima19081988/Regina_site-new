@@ -1,5 +1,6 @@
 import styles from './Homepage.module.css';
 import TrendsSection from '../../components/TrendSection/TrendsSection';
+import PromotionsSection from '../../components/Promotions/PromotionsSection';
 
 export default function Homepage() {
   return (
@@ -8,6 +9,7 @@ export default function Homepage() {
         <h2></h2>
         <p></p>
       </section>
+      <PromotionsSection />
       <TrendsSection />
     </div>
   );

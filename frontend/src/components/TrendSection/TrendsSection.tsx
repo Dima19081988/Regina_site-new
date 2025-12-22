@@ -20,7 +20,12 @@ export default function TrendsSection() {
               ease: 'easeOut',
             }}
           >
-            <Link to={`/trends/${trend.slug}`} key={trend.id} className={styles.trendCard}>
+            <Link 
+              to={`/trends/${trend.slug}`} 
+              state={{ category: trend.category }} 
+              key={trend.id} 
+              className={styles.trendCard}
+            >
               <img
                 src={trend.image}
                 alt={trend.title}

@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PublicLayout from './components/PublicLayout/PublicLayout';
 import AdminLayout from './components/AdminLayout/AdminLayout';
 import Homepage from './pages/Homepage/Homepage';
+import AboutPage from './pages/About/AboutPage';
+import ContactsPage from './pages/Contacts/ContactsPage';
+import PromotionsPage from './pages/Promotions/PromotionsPage';
 import AdminHomepage from './pages/Homepage/AdminHomePage';
 import LoginPage from './pages/Login/LoginPage';
 import PricePage from './pages/PriceList/public/PricePage';
@@ -31,6 +34,22 @@ function App() {
           }
         />
         <Route
+          path='/promotions'
+          element={
+            <PublicLayout>
+              <PromotionsPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path='/about'
+          element={
+            <PublicLayout>
+              <AboutPage />
+            </PublicLayout>
+          }
+        />
+        <Route
           path="/portfolio"
           element={
             <PublicLayout>
@@ -51,6 +70,14 @@ function App() {
           element={
             <PublicLayout>
               <PricePage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PublicLayout>
+              <ContactsPage />
             </PublicLayout>
           }
         />
