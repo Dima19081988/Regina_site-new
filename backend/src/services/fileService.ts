@@ -22,7 +22,12 @@ const ALLOWED_EXTENSIONS = new Set([
   '.docx',
 ]);
 
-const ALLOWED_FOLDERS = new Set(['portfolio/images', 'portfolio/documents', 'files']);
+const ALLOWED_FOLDERS = new Set([
+  'portfolio/images',
+  'portfolio/documents',
+  'files',
+  'services/images',
+]);
 //функция определения расширения
 const getMimeType = (ext: string): string => {
   switch (ext) {
@@ -80,9 +85,14 @@ export const uploadFileToS3 = async (
 
   //Проверка, был ли такой файл уже загружен
   const fileHash = getFileHash(fileBuffer);
-  const existingHash = await db.query('SELECT 1 FROM file_hashes WHERE hash = $1', [fileHash]);
-  if (existingHash.rows.length > 0) {
-    throw new Error('Файл с таким содержимым уже был загружен');
+  if (folder !== 'services/images') {
+    const existingHash = await db.query(
+      'SELECT 1 FROM file_hashes WHERE hash = $1',
+      [fileHash]
+    );
+    if (existingHash.rows.length > 0) {
+      throw new Error('Файл с таким содержимым уже был загружен');
+    }
   }
 
   //генерация уникального имени
@@ -107,8 +117,14 @@ export const uploadFileToS3 = async (
   await db.query('INSERT INTO file_hashes (hash) VALUES ($1) ON CONFLICT (hash) DO NOTHING', [
     fileHash,
   ]);
+  
+  if (folder !== 'services/images') {
+    await db.query(
+      'INSERT INTO file_hashes (hash) VALUES ($1) ON CONFLICT (hash) DO NOTHING',
+      [fileHash]
+    );
+  }
 
-  //публичная ссылка
   return `https://${BUCKET_NAME}.storage.yandexcloud.net/${key}`;
 };
 

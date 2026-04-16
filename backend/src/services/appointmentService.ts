@@ -7,14 +7,14 @@ export const getAllAppointments = async (): Promise<Appointment[]> => {
 };
 
 export const createAppointment = async (
-  data: Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>
+  data: Pick<Appointment, 'client_name' | 'service' | 'service_id' | 'appointment_time' | 'price'>
 ): Promise<Appointment> => {
-  const { client_name, service, appointment_time, price } = data;
+  const { client_name, service, service_id, appointment_time, price } = data;
   const result = await db.query(
-    `INSERT INTO appointments (client_name, service, appointment_time, price)
-        VALUES ($1, $2, $3, $4)
+    `INSERT INTO appointments (client_name, service, service_id, appointment_time, price)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *`,
-    [client_name, service, appointment_time, price]
+    [client_name ?? null, service, service_id ?? null, appointment_time, price]
   );
 
   return result.rows[0];
@@ -56,17 +56,16 @@ export const getAppointmentCountsByMonth = async (
   for (const row of result.rows) {
     const dayStr = row.day.toISOString().split('T')[0];
     counts[dayStr] = row.count;
-    console.log('Row:', row);
   }
   return counts;
 };
 
 export const updateAppointment = async (
   id: number,
-  data: Partial<Pick<Appointment, 'client_name' | 'service' | 'appointment_time' | 'price'>>
+  data: Partial<Pick<Appointment, 'client_name' | 'service' | 'service_id' | 'appointment_time' | 'price'>>
 ): Promise<Appointment | null> => {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: Array<string | number | null> = [];
   let paramIndex = 1;
 
   if (data.client_name != undefined) {
@@ -78,6 +77,12 @@ export const updateAppointment = async (
   if (data.service != undefined) {
     fields.push(`service = $${paramIndex}`);
     values.push(data.service);
+    paramIndex++;
+  }
+
+  if (data.service_id !== undefined) {
+    fields.push(`service_id = $${paramIndex}`);
+    values.push(data.service_id);
     paramIndex++;
   }
 

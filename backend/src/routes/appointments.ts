@@ -8,6 +8,7 @@ import {
   updateAppointment,
   deleteAppointment,
 } from '../services/appointmentService';
+import { sendTelegramMessage } from '../services/telegramService';
 import { Appointment } from '../models/types/Apointments';
 import { requireAuth } from '../middleware/authMiddleware';
 
@@ -78,6 +79,40 @@ router.get('/:id', requireAuth, async (req, res) => {
   }
 });
 
+
+router.get('/date/:date', requireAuth, async (req, res) => {
+  const { date } = req.params;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return res.status(400).json({ error: 'Неверный формат даты. Используйте ГГГГ-ММ-ДД' });
+  }
+  try {
+    const appointments = await getAllAppointmentByDate(date);
+    res.json(appointments);
+  } catch (err) {
+    console.error('Ошибка:', err);
+    res.status(500).json({ error: 'Не удалось загрузить записи' });
+  }
+});
+
+router.get('/counts/:year/:month', requireAuth, async (req, res) => {
+  const { year, month } = req.params;
+  const yearNum = parseInt(year);
+  const monthNum = parseInt(month);
+
+  if (isNaN(yearNum) || isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
+    return res.status(400).json({ error: 'Год и месяц должны быть числами (месяц: 1–12)' });
+  }
+
+  try {
+    const counts = await getAppointmentCountsByMonth(yearNum, monthNum);
+    res.json(counts);
+  } catch (err) {
+    console.error('Ошибка загрузки статистики:', err);
+    res.status(500).json({ error: 'Не удалось загрузить данные' });
+  }
+});
+
+
 router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const appointmentId = Number(id);
@@ -117,53 +152,50 @@ router.delete('/:id', requireAuth, async (req, res) => {
 });
 
 //остальные
-router.get('/date/:date', requireAuth, async (req, res) => {
-  const { date } = req.params;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return res.status(400).json({ error: 'Неверный формат даты. Используйте ГГГГ-ММ-ДД' });
-  }
-  try {
-    const appointments = await getAllAppointmentByDate(date);
-    res.json(appointments);
-  } catch (err) {
-    console.error('Ошибка:', err);
-    res.status(500).json({ error: 'Не удалось загрузить записи' });
-  }
-});
-
-router.get('/counts/:year/:month', requireAuth, async (req, res) => {
-  const { year, month } = req.params;
-  const yearNum = parseInt(year);
-  const monthNum = parseInt(month);
-
-  if (isNaN(yearNum) || isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
-    return res.status(400).json({ error: 'Год и месяц должны быть числами (месяц: 1–12)' });
-  }
-
-  try {
-    const counts = await getAppointmentCountsByMonth(yearNum, monthNum);
-    res.json(counts);
-  } catch (err) {
-    console.error('Ошибка загрузки статистики:', err);
-    res.status(500).json({ error: 'Не удалось загрузить данные' });
-  }
-});
 
 router.post('/', requireAuth, async (req, res) => {
-  const { client_name, service, appointment_time, price } = req.body;
-  if (!client_name || !service || !appointment_time) {
-    return res
-      .status(400)
-      .json({ error: 'Поля client_name, service, appointment_time обязательны' });
+  const { client_name, service, service_id, appointment_time, price } = req.body;
+  if (!appointment_time || !service_id) {
+    return res.status(400).json({
+      error: 'Поля client_name, service_id, appointment_time обязательны',
+    });
   }
 
   try {
     const appointment: Appointment = await createAppointment({
-      client_name,
-      service,
+      client_name: client_name ?? null,
+      service: service ?? '',
+      service_id: service_id ? Number(service_id) : null,
       appointment_time,
       price: price ? parseFloat(price) : null,
     });
+
+    const date = new Date(appointment.appointment_time);
+    const timeStr = date.toLocaleString('ru-RU', {
+      day: 'numeric',
+      month: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Moscow',
+    });
+
+    const clientInfo = appointment.client_name
+      ? `👤 ${appointment.client_name}`
+      : '👤 Клиент не указан';
+
+    const priceInfo = appointment.price
+      ? `💰 ${Number(appointment.price).toLocaleString('ru-RU')} ₽`
+      : '';
+
+    const message =
+      `📅 <b>Новая запись!</b>\n\n` +
+      `🕐 ${timeStr}\n` +
+      `💆 ${appointment.service}\n` +
+      `${clientInfo}\n` +
+      (priceInfo ? `${priceInfo}\n` : '');
+
+    await sendTelegramMessage(message);
+    
     res.json(appointment);
   } catch (err) {
     console.error('Ошибка создания записи: ', err);

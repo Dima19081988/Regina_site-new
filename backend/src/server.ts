@@ -3,12 +3,25 @@ import session from 'express-session';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit'; 
 import { Request, Response, NextFunction } from 'express'; 
-import { db } from './config/db';
 import appointmentsRouter from './routes/appointments.js';
 import notesRouter from './routes/notes.js';
+import { db } from './config/db.js';
 import portfolioRouter from './routes/portfolio.js';
 import filesRouter from './routes/files.js';
 import authRouter from './routes/auth.js';
+import categoriesRouter from './routes/categories.js'
+import serviceRouter from './routes/services.js';
+import serviceImagesRouter from './routes/serviceImages.js';
+import { startReminderCron } from './jobs/reminderCron.js';
+
+(async () => {
+  try {
+    const res = await db.query('SELECT current_database(), current_schema()');
+    console.log('DB info:', res.rows[0]);
+  } catch (e) {
+    console.error('DB info error:', e);
+  }
+})();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,8 +33,15 @@ const allowedOrigins = [
 ];
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 минут
-  max: 10,                  // 10 запросов с IP за окно
+  windowMs: 15 * 60 * 1000, 
+  max: 10,                  
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const checkLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 60,                  
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -64,16 +84,25 @@ app.use('/api/appointments', appointmentsRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/portfolio', portfolioRouter);
 app.use('/api/files', filesRouter);
-app.use('/api/auth', authLimiter, authRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/services', serviceRouter);
+app.use('/api/service-images', serviceImagesRouter);
+app.use('/api/auth/check', checkLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/logout', authLimiter);
+app.use('/api/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: '✅ Backend is running!' });
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled error:', err);
+
+  const message = err instanceof Error ? err.message : 'Internal Server Error';
+
   if (!res.headersSent) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: message });
   }
 });
 
@@ -81,10 +110,6 @@ console.log('✅ Routers connected: appointments, notes, portfolio, files');
 
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  try {
-    await db.connect();
-    console.log('✅ PostgreSQL connected');
-  } catch (err) {
-    console.error('❌ DB Error:', err);
-  }
+  console.log('✅ PostgreSQL pool ready');
+  startReminderCron();
 });
