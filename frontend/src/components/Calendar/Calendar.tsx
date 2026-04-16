@@ -94,7 +94,7 @@ export default function Calendar() {
             key={index}
             className={`
               ${styles.day} 
-              ${count > 0 ? styles['day--has-appointments'] : ''}}
+              ${count > 0 ? styles['day--has-appointments'] : ''}
               ${isCurrentDay ? styles['day__today'] : ''}
             `.trim()}
             onClick={() => handleDayClick(day)}

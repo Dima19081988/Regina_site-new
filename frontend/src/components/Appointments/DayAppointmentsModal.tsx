@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import type { Appointment } from '../../types';
+import type { Appointment, Service, Category} from '../../types';
+import { getServices } from '../../api/servicesApi';
+import { getCategories } from '../../api/categoriesApi';
 import styles from './DayAppointmentsModal.module.css';
 
 interface DayAppointmentsModalProps {
@@ -8,17 +10,22 @@ interface DayAppointmentsModalProps {
 }
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+const emptyForm = {
+  time: '',
+  client_name: '',
+  service_id: '',
+  price: '',
+};
+
 export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsModalProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [currentAppointment, setCurrentAppointment] = useState({
-    time: '',
-    client_name: '',
-    service: '',
-    price: '',
-  });
+  const [form, setForm] = useState(emptyForm);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('null');
 
   useEffect(() => {
     const loadAppointments = async () => {
@@ -42,30 +49,64 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
     loadAppointments();
   }, [date]);
 
+  useEffect(() => {
+    getServices()
+      .then(setServices)
+      .catch((err) => console.error('Не удалось загрузить услуги:', err));
+
+    getCategories()
+      .then(setCategories)
+      .catch((err) => console.error('Не удалось загрузить категории:', err));
+  }, []);
+
+  const filteredServices = selectedCategoryId
+    ? services.filter((s) => s.category_id === Number(selectedCategoryId))
+    : services;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategoryId(e.target.value);
+    setForm((prev) => ({ ...prev, service_id: '' }));
+  };
+
+  const selectedService = services.find((s) => s.id === Number(form.service_id));
+
+  const buildPayload = () => {
+    const appointmentTime = `${date} ${form.time}:00`;
+    const priceNum = form.price ? parseFloat(form.price) : null;
+    return {
+      client_name: form.client_name || null,
+      service: selectedService?.title || '',
+      service_id: form.service_id ? Number(form.service_id) : null,
+      appointment_time: appointmentTime,
+      price: priceNum,
+    };
+  };
+  
+  const resetForm = () => {
+    setForm(emptyForm);
+    setSelectedCategoryId('');
+    setEditingId(null);
+  };
+
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Отправка формы:', { date, currentAppointment });
-    const appointmentTime = `${date} ${currentAppointment.time}:00`;
-    const priceNum = currentAppointment.price ? parseFloat(currentAppointment.price) : null;
-
     try {
       const response = await fetch(`${API_BASE}/api/appointments`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client_name: currentAppointment.client_name,
-          service: currentAppointment.service,
-          appointment_time: appointmentTime,
-          price: priceNum,
-        }),
+        body: JSON.stringify(buildPayload()),
       });
 
       if (response.ok) {
         const newAppointment: Appointment = await response.json();
         setAppointments((prev) => [...prev, newAppointment]);
-        //сброс формы
-        setCurrentAppointment({ time: '', client_name: '', service: '', price: '' });
+        setForm(emptyForm);
       } else {
         alert('Не удалось добавить запись');
       }
@@ -77,10 +118,13 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
 
   const startEditing = (appointment: Appointment) => {
     const time = new Date(appointment.appointment_time).toTimeString().slice(0, 5);
-    setCurrentAppointment({
-      time: time,
-      client_name: appointment.client_name,
-      service: appointment.service,
+
+    const service = services.find((s) => s.id === appointment.service_id) || null;
+    setSelectedCategoryId(service?.category_id ? String(service.category_id) : '');
+    setForm({
+      time,
+      client_name: appointment.client_name ?? '',
+      service_id: appointment.service_id ? String(appointment.service_id) : '',
       price: appointment.price ? String(appointment.price) : '',
     });
     setEditingId(appointment.id);
@@ -88,29 +132,20 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingId) return;
-
-    const appointmentTime = `${date} ${currentAppointment.time}:00`;
-    const priceNum = currentAppointment.price ? parseFloat(currentAppointment.price) : null;
+    if (editingId === null) return;
 
     try {
       const response = await fetch(`${API_BASE}/api/appointments/${editingId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client_name: currentAppointment.client_name,
-          service: currentAppointment.service,
-          appointment_time: appointmentTime,
-          price: priceNum,
-        }),
+        body: JSON.stringify(buildPayload()),
       });
 
       if (response.ok) {
         const updated: Appointment = await response.json();
         setAppointments((prev) => prev.map((a) => (a.id === editingId ? updated : a)));
-        setEditingId(null);
-        setCurrentAppointment({ time: '', client_name: '', service: '', price: '' });
+        resetForm()
       } else {
         alert('Не удалось обновить запись');
       }
@@ -121,7 +156,7 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Удалить запись?')) return;
+    if (!window.confirm('Удалить запись?')) return;
     try {
       const response = await fetch(`${API_BASE}/api/appointments/${id}`, {
         method: 'DELETE',
@@ -156,55 +191,73 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
         </div>
 
         {/* Форма добавления */}
-        <form onSubmit={editingId ? handleUpdate : handleAdd} className={styles.addForm}>
-          <h3>{editingId ? 'Редактировать запись' : 'Добавить запись'}</h3>
+        <form onSubmit={editingId === null ? handleAdd : handleUpdate} className={styles.addForm}>
+          <h3>{editingId === null ? 'Добавить запись' : 'Редактировать запись'}</h3>
           <div className={styles.formGroup}>
             <label>Время (ЧЧ:ММ)</label>
             <input
               type="time"
-              value={currentAppointment.time}
-              onChange={(e) => setCurrentAppointment((prev) => ({ ...prev, time: e.target.value }))}
+              name='time'
+              value={form.time}
+              onChange={handleChange}
               required
             />
           </div>
           <div className={styles.formGroup}>
-            <label>Имя клиента *</label>
+            <label>Имя клиента / заметка (необязательно)</label>
             <input
-              value={currentAppointment.client_name}
-              onChange={(e) =>
-                setCurrentAppointment((prev) => ({ ...prev, client_name: e.target.value }))
-              }
-              required
+              value={form.client_name}
+              name='client_name'
+              onChange={handleChange}
+              placeholder="Мария, постоянный клиент..."
             />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Категория</label>
+            <select value={selectedCategoryId} onChange={handleCategoryChange}>
+              <option value="">— все категории —</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
           </div>
           <div className={styles.formGroup}>
             <label>Услуга *</label>
-            <input
-              value={currentAppointment.service}
-              onChange={(e) =>
-                setCurrentAppointment((prev) => ({ ...prev, service: e.target.value }))
-              }
+            <select 
+              name="service_id"
+              value={form.service_id}
+              onChange={handleChange}
               required
-            />
+            >
+              <option value="">— выберите услугу —</option>
+              {filteredServices.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.title}
+                  {s.price_note ? ` (${s.price_note})` : ''}
+                </option>
+              ))}
+            </select>
           </div>
           <div className={styles.formGroup}>
             <label>Цена (руб.)</label>
             <input
               type="number"
-              value={currentAppointment.price}
-              onChange={(e) =>
-                setCurrentAppointment((prev) => ({ ...prev, price: e.target.value }))
-              }
+              name='price'
+              value={form.price}
+              onChange={handleChange}
             />
           </div>
+
           <div className={styles.formActions}>
-            <button type="submit">{editingId ? 'Сохранить' : 'Добавить'}</button>
-            {editingId && (
+            <button type="submit">
+              {editingId === null ? 'Добавить' : 'Сохранить'}
+            </button>
+            {editingId !==null && (
               <button
                 type="button"
                 onClick={() => {
                   setEditingId(null);
-                  setCurrentAppointment({ time: '', client_name: '', service: '', price: '' });
+                  setForm(emptyForm);
                 }}
                 className={styles.cancelButton}
               >
@@ -233,8 +286,9 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
                       minute: '2-digit',
                     })}
                   </strong>
-                  — {a.client_name}, {a.service}
-                  {a.price && ` (${a.price} ₽)`}
+                  {' — '}{a.service}
+                  {a.client_name && ` (${a.client_name})`}
+                  {a.price && ` — ${a.price} ₽`}
                   <div className={styles.appointmentActions}>
                     <button onClick={() => startEditing(a)} className={styles.editButton}>
                       Изменить запись

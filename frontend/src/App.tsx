@@ -8,6 +8,9 @@ import PromotionsPage from './pages/Promotions/PromotionsPage';
 import AdminHomepage from './pages/Homepage/AdminHomePage';
 import LoginPage from './pages/Login/LoginPage';
 import PricePage from './pages/PriceList/public/PricePage';
+import ServicesPage from './pages/ServicesPage/public/ServicesPage';
+import ServiceDetailsPage from './pages/ServicesPage/public/ServiceDetailsPage';
+import AdminServicesPage from './pages/ServicesPage/admin/AdminServicesPage';
 import TrendDetailPage from './components/TrendSection/TrendDetailPage';
 import AdminPricePage from './pages/PriceList/admin/AdminPricePage';
 import PortfolioPage from './pages/Portfolio/public/PortfolioPage';
@@ -66,6 +69,22 @@ function App() {
           }
         />
         <Route
+          path="/services"
+          element={
+            <PublicLayout>
+              <ServicesPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/services/:slug"
+          element={
+            <PublicLayout>
+              <ServiceDetailsPage />
+            </PublicLayout>
+          }
+        />
+        <Route
           path="/pricelist"
           element={
             <PublicLayout>
@@ -95,7 +114,7 @@ function App() {
           <Route
             path="/admin/"
             element={
-              <AdminLayout title="Начальная страница админа">
+              <AdminLayout title="Начальная страница админа" showBackButton={false}>
                 <AdminHomepage />
               </AdminLayout>
             }
@@ -130,6 +149,12 @@ function App() {
               <AdminLayout title="Прайслист">
                 <AdminPricePage />
               </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/services"
+            element={
+              <AdminServicesPage />
             }
           />
           <Route

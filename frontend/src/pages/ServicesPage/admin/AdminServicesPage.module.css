@@ -1,0 +1,318 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.2fr);
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+
+.list {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(155, 89, 182, 0.15);
+  box-shadow: 0 8px 24px rgba(43, 62, 80, 0.08);
+  overflow: hidden; 
+  padding: 0;
+}
+
+.state {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--color-text-secondary);
+}
+
+/* таблица */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table th {
+  background: #f1e8ff;
+  color: var(--color-text);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 2px solid var(--color-border);
+  text-align: left;
+  font-weight: var(--font-weight-bold);
+}
+
+.table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  color: var(--color-primary-dark);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table th:last-child,
+.table td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.table tbody tr:nth-child(odd) {
+  background: #fbf8ff;
+}
+
+.thSortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.thSortable:hover {
+  color: var(--color-primary);
+}
+
+/* ячейка с кнопками */
+.actionsCell {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.buttonSmall,
+.buttonSmallDanger {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: none;
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.buttonSmall {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.buttonSmall:hover {
+  background: var(--color-primary-dark);
+}
+
+.buttonSmallDanger {
+  background: var(--color-danger);
+  color: var(--color-white);
+}
+
+.buttonSmallDanger:hover {
+  filter: brightness(0.9);
+}
+
+/* форма */
+.formWrapper {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid rgba(155, 89, 182, 0.15);
+  box-shadow: 0 8px 24px rgba(43, 62, 80, 0.08);
+}
+
+.formTitle {
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-lg-desktop);
+  color: var(--color-primary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field select {
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+.field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.12);
+}
+
+.fieldInline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+}
+
+.field span,
+.fieldInline span {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-dark);
+}
+
+.field input,
+.field textarea,
+.fieldInline input {
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+.field input:focus,
+.field textarea:focus,
+.fieldInline input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.12);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.tab {
+  padding: 10px 18px;
+  border: 1px solid rgba(155, 89, 182, 0.18);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background: rgba(155, 89, 182, 0.08);
+  color: var(--color-primary);
+}
+
+.tabActive {
+  background: rgba(155, 89, 182, 0.14);
+  color: var(--color-primary);
+  border-color: rgba(155, 89, 182, 0.3);
+}
+
+.saveButton {
+  align-self: flex-start;
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 999px;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover:enabled {
+  background: var(--color-primary-dark);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.imagePreview {
+  margin-top: var(--space-sm);
+  max-width: 200px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.imagePreview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.helpText {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* мобилка */
+@media (max-width: 768px) {
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .wrapper {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .fieldInline {
+    grid-template-columns: 1fr;
+  }
+
+  /* таблица → карточки на мобилке */
+  .table thead {
+    display: none; /* скрываем шапку */
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-white);
+  }
+
+  .table td {
+    border-bottom: none;
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--color-text);
+  }
+
+  /* подписи для ячеек через data-label */
+  .table td::before {
+    content: attr(data-label);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .actionsCell {
+    flex-wrap: wrap;
+    padding-top: var(--space-xs);
+  }
+}

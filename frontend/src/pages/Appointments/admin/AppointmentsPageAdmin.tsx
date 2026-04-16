@@ -13,14 +13,19 @@ export default function AppointmentsPageAdmin() {
 
   useEffect(() => {
     const loadReminders = async () => {
-      const [todayRes, tomorrowRes, afterTomorrowRes] = await Promise.all([
-        fetch(`${API_BASE}/api/appointments/today`, { credentials: 'include' }),
-        fetch(`${API_BASE}/api/appointments/tomorrow`, { credentials: 'include' }),
-        fetch(`${API_BASE}/api/appointments/after-tomorrow`, { credentials: 'include' }),
-      ]);
-      setToday(await todayRes.json());
-      setTomorrow(await tomorrowRes.json());
-      setAfterTomorrow(await afterTomorrowRes.json());
+      try {
+        const [todayRes, tomorrowRes, afterTomorrowRes] = await Promise.all([
+          fetch(`${API_BASE}/api/appointments/today`, { credentials: 'include' }),
+          fetch(`${API_BASE}/api/appointments/tomorrow`, { credentials: 'include' }),
+          fetch(`${API_BASE}/api/appointments/after-tomorrow`, { credentials: 'include' }),
+        ]);
+
+        if (todayRes.ok) setToday(await todayRes.json());
+        if (tomorrowRes.ok) setTomorrow(await tomorrowRes.json());
+        if (afterTomorrowRes.ok) setAfterTomorrow(await afterTomorrowRes.json());
+      } catch (err) {
+        console.error('Ошибка загрузки напоминаний:', err);
+      }
     };
     loadReminders();
   }, []);
@@ -42,7 +47,7 @@ export default function AppointmentsPageAdmin() {
           )}
           {afterTomorrow.length > 0 && (
             <div className={`${styles.reminder} ${styles['reminder--after-tomorrow']}`}>
-              📅<strong>Завтра</strong> у вас {afterTomorrow.length}{' '}
+              📅<strong>Послезавтра</strong> у вас {afterTomorrow.length}{' '}
               {pluralize(afterTomorrow.length)}.
             </div>
           )}

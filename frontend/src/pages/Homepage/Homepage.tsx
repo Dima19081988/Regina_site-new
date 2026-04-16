@@ -6,8 +6,11 @@ export default function Homepage() {
   return (
     <div className={styles.container}>
       <section className={styles.hero}>
-        <h2></h2>
-        <p></p>
+        <img
+          src="/images/bg-public.jpg"
+          alt="Регина Кузнецова — косметолог"
+          className={styles.heroImage}
+        />
       </section>
       <PromotionsSection />
       <TrendsSection />

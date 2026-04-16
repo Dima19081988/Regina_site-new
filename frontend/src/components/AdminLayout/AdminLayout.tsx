@@ -6,6 +6,7 @@ interface AdminLayoutProps {
   children: React.ReactNode;
   showAddButton?: boolean;
   onAddClick?: () => void;
+  showBackButton?: boolean; 
 }
 
 export default function AdminLayout({
@@ -13,13 +14,16 @@ export default function AdminLayout({
   children,
   showAddButton = false,
   onAddClick,
+  showBackButton = true,
 }: AdminLayoutProps) {
   return (
     <div className={styles['admin-layout']}>
       <div className={styles.header}>
-        <Link to="/admin/" className={styles['back-button']}>
-          ← Назад
-        </Link>
+        {showBackButton && (
+          <Link to="/admin/" className={styles['back-button']}>
+            ← Назад
+          </Link>
+        )}
         <h1 className={styles.title}>{title}</h1>
         {showAddButton && (
           <button onClick={onAddClick} className={styles['add-button']}>

@@ -1,8 +1,9 @@
 .promotionsSection {
-  padding: calc(var(--space-xl) * 2) 0;
-  background: linear-gradient(135deg, var(--color-bg-public) 0%, #f0e8ff 100%);
+  padding: var(--space-xl) 0;
+  background: linear-gradient(135deg, #f3e8ff 0%, #e0ccff 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
 }
-
 .container {
   max-width: 1200px;
   margin: 0 auto;

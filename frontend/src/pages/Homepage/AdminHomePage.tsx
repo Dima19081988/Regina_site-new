@@ -83,6 +83,11 @@ export default function AdminHomepage() {
             </Link>
           </li>
           <li>
+            <Link to="/admin/services" className={styles['nav-link']}>
+              Редактор услуг
+            </Link>
+          </li>
+          <li>
             <Link to="/admin/files" className={styles['nav-link']}>
               Файлы
             </Link>
