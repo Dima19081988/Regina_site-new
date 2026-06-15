@@ -22,6 +22,7 @@ import AppointmentsPageAdmin from './pages/Appointments/admin/AppointmentsPageAd
 import AdminNotesPage from './pages/Notes/AdminNotesPage';
 import AdminFilesPage from './pages/Files/AdminFilesPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminCertificatesPage from './pages/Certificates/AdminCertificatesPage';
 
 function App() {
   return (
@@ -178,6 +179,14 @@ function App() {
             element={
               <AdminLayout title="Файлы">
                 <AdminFilesPage />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/certificates"
+            element={
+              <AdminLayout title="Подарочные сертификаты">
+                <AdminCertificatesPage />
               </AdminLayout>
             }
           />

@@ -102,6 +102,11 @@ export default function AdminHomepage() {
               Записи
             </Link>
           </li>
+          <li>
+            <Link to="/admin/certificates" className={styles['nav-link']}>
+              Сертификаты
+            </Link>
+          </li>
         </ul>
       </nav>
       <div className={styles.stats}>
