@@ -1,9 +1,7 @@
 import styles from './ContactsPage.module.css';
 
 const CONTACTS = {
-    phone: '+7 985 232 29 54',
-    whatsapp: '+7 985 232 29 54',
-    telegram: '',
+    phone: '+7 985 232 29 54 (+ Whatsapp, Telegram)',
     address: [
         'ООО Пластика С, Королёв, ул.Строителей, д.4',
         'Королёв, ул.Пионерская, д.30',
@@ -27,19 +25,6 @@ export default function ContactInfo() {
                         <div>
                             <h3>Телефон</h3>
                             <a href={`tel:${CONTACTS.phone.replace(/\D/g, '')}`}>{CONTACTS.phone}</a>
-                        </div>
-                    </div>
-                    <div className={styles.contactItem}>
-                        <div className={styles.icon}>💬</div>
-                        <div>
-                            <h3>WhatsApp / Telegram</h3>
-                            <a href={`https://wa.me/${CONTACTS.whatsapp.replace(/\D/g, '')}`} target="_blank">
-                                {CONTACTS.whatsapp}
-                            </a>
-                            <br />
-                            <a href={`https://t.me/${CONTACTS.telegram}`} target="_blank">
-                                @{CONTACTS.telegram}
-                            </a>
                         </div>
                     </div>
                 </div>

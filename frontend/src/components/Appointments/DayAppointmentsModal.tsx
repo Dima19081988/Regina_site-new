@@ -204,13 +204,24 @@ export default function DayAppointmentsModal({ date, onClose }: DayAppointmentsM
             />
           </div>
           <div className={styles.formGroup}>
-            <label>Имя клиента / заметка (необязательно)</label>
+            <label htmlFor="appointment-label">
+              Внутренняя пометка (необязательно)
+            </label>
+
             <input
+              id="appointment-label"
+              type="text"
               value={form.client_name}
-              name='client_name'
+              name="client_name"
               onChange={handleChange}
-              placeholder="Мария, постоянный клиент..."
+              placeholder="Например: Окно занято"
+              maxLength={40}
+              autoComplete="off"
             />
+
+            <p className={styles.fieldHint}>
+              Не указывайте имя, телефон, email, адрес или сведения о здоровье клиента.
+            </p>
           </div>
           <div className={styles.formGroup}>
             <label>Категория</label>

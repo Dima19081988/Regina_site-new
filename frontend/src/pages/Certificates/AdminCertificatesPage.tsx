@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { PDFDocument, rgb } from 'pdf-lib';
-import fontkit from '@pdf-lib/fontkit';
+import { useEffect, useState } from 'react';
 import styles from './AdminCertificatesPage.module.css';
 
 function formatAmount(value: number) {
@@ -17,14 +15,38 @@ function centerX(
   return (pageWidth - textWidth) / 2;
 }
 
+let pdfModulesPromise: Promise<{
+  PDFDocument: typeof import('pdf-lib').PDFDocument;
+  rgb: typeof import('pdf-lib').rgb;
+  fontkit: unknown;
+}> | null = null;
+
+function loadPdfModules() {
+  if (!pdfModulesPromise) {
+    pdfModulesPromise = Promise.all([
+      import('pdf-lib'),
+      import('@pdf-lib/fontkit'),
+    ]).then(([pdfLib, fontkitModule]) => ({
+      PDFDocument: pdfLib.PDFDocument,
+      rgb: pdfLib.rgb,
+      fontkit: 'default' in fontkitModule ? fontkitModule.default : fontkitModule,
+    }));
+  }
+
+  return pdfModulesPromise;
+}
+
 export default function AdminCertificatesPage() {
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    void loadPdfModules();
+  }, []);
+
   const handleGeneratePdf = async () => {
     const cleanAmount = Number(amount.replace(/\s/g, '').replace(',', '.'));
-
     if (!cleanAmount || cleanAmount <= 0) {
       alert('Введите корректную сумму сертификата');
       return;
@@ -32,9 +54,9 @@ export default function AdminCertificatesPage() {
 
     try {
       setLoading(true);
-
+      const { PDFDocument, rgb, fontkit } = await loadPdfModules();
       const pdfDoc = await PDFDocument.create();
-      pdfDoc.registerFontkit(fontkit);
+      pdfDoc.registerFontkit(fontkit as Parameters<typeof pdfDoc.registerFontkit>[0]);
 
       const regularFontBytes = await fetch('/fonts/OpenSans-Regular.ttf').then((res) =>
         res.arrayBuffer()
@@ -44,6 +66,11 @@ export default function AdminCertificatesPage() {
         res.arrayBuffer()
       );
 
+      const italicFontBytes = await fetch('/fonts/OpenSans-Italic.ttf').then((res) =>
+        res.arrayBuffer()
+      );
+
+      const fontItalic = await pdfDoc.embedFont(italicFontBytes);
       const fontRegular = await pdfDoc.embedFont(regularFontBytes);
       const fontBold = await pdfDoc.embedFont(boldFontBytes);
 
@@ -97,7 +124,7 @@ export default function AdminCertificatesPage() {
       const title = 'ПОДАРОЧНЫЙ СЕРТИФИКАТ';
       const subtitle = 'На косметологические услуги';
       const amountText = `${formatAmount(cleanAmount)} рублей`;
-      const doctorLabel = 'Ваш косметолог';
+      const doctorLabel = 'Ваш врач-косметолог';
       const doctorName = 'Регина Кузнецова';
 
       page.drawText(title, {
@@ -116,10 +143,10 @@ export default function AdminCertificatesPage() {
       });
 
       page.drawText(subtitle, {
-        x: centerX(subtitle, fontRegular, 16, width),
+        x: centerX(subtitle, fontItalic, 16, width),
         y: height - 180,
         size: 16,
-        font: fontRegular,
+        font: fontItalic,
         color: textColor,
       });
 
@@ -143,10 +170,10 @@ export default function AdminCertificatesPage() {
       }
 
       page.drawText(doctorLabel, {
-        x: centerX(doctorLabel, fontRegular, 16, width),
+        x: centerX(doctorLabel, fontItalic, 16, width),
         y: height - 420,
         size: 16,
-        font: fontRegular,
+        font: fontItalic,
         color: textColor,
       });
 
@@ -182,9 +209,13 @@ export default function AdminCertificatesPage() {
       const link = document.createElement('a');
       link.href = url;
       link.download = `certificate-${cleanAmount}.pdf`;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
 
-      URL.revokeObjectURL(url);
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
     } catch (error) {
       console.error(error);
       alert('Не удалось сформировать PDF');

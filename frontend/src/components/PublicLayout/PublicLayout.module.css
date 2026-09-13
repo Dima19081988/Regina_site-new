@@ -93,6 +93,29 @@
   margin: 0;
 }
 
+.footerContacts a {
+  display: inline-block;
+  font-size: var(--font-size-lg-desktop);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  text-decoration: none;
+
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary),
+    var(--color-primary)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footerContacts a:hover,
+.footerContacts a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .footerSocial {
   display: flex;
   flex-direction: row;

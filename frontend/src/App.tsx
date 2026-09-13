@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 import PublicLayout from './components/PublicLayout/PublicLayout';
 import AdminLayout from './components/AdminLayout/AdminLayout';
 import Homepage from './pages/Homepage/Homepage';
@@ -22,7 +23,10 @@ import AppointmentsPageAdmin from './pages/Appointments/admin/AppointmentsPageAd
 import AdminNotesPage from './pages/Notes/AdminNotesPage';
 import AdminFilesPage from './pages/Files/AdminFilesPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminCertificatesPage from './pages/Certificates/AdminCertificatesPage';
+
+const AdminCertificatesPage = lazy(
+  () => import('./pages/Certificates/AdminCertificatesPage')
+);
 
 function App() {
   return (
@@ -186,7 +190,9 @@ function App() {
             path="/admin/certificates"
             element={
               <AdminLayout title="Подарочные сертификаты">
-                <AdminCertificatesPage />
+                <Suspense fallback={<div style={{ padding: 24 }}>Загрузка страницы сертификатов...</div>}>
+                  <AdminCertificatesPage />
+                </Suspense>
               </AdminLayout>
             }
           />

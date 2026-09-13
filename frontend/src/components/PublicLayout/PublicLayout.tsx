@@ -46,24 +46,13 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             <h3>Regina-cosmetology</h3>
             <p>Профессиональный подход к красоте</p>
           </div>
-          <div className={styles.footerSocial}>
-            <a href="" target="_blank" rel="noopener noreferrer">
-              💬 Telegram
-            </a>
-            <a href="" target="_blank" rel="noopener noreferrer">
-              📸 Instagram
-            </a>
-            <a href="" target="_blank" rel="noopener noreferrer">
-              📱 WhatsApp
-            </a>
+
+          <div className={styles.footerContacts}>
+            <Link to="/contacts">Контакты</Link>
           </div>
+
           <div className={styles.footerCopyright}>
             <p>&copy; {new Date().getFullYear()} Regina. Все права защищены.</p>
-            <div className={styles.legalLinks}>
-              <Link to="/privacy">Политика конфиденциальности</Link>
-              <span> | </span>
-              <Link to="/terms">Условия</Link>
-            </div>
           </div>
         </div>
       </footer>
