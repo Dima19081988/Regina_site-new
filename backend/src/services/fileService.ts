@@ -114,9 +114,6 @@ export const uploadFileToS3 = async (
   await s3Client.send(command);
 
   //Сохранение хеша в базе, чтобы избежать будущих дублей
-  await db.query('INSERT INTO file_hashes (hash) VALUES ($1) ON CONFLICT (hash) DO NOTHING', [
-    fileHash,
-  ]);
   
   if (folder !== 'services/images') {
     await db.query(

@@ -40,7 +40,7 @@ const upload = multer({
   },
 });
 
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
     const files: FileItem[] = await getAllFiles();
     res.json(files);
@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   if (isNaN(id) || id <= 0) {
     return res.status(400).json({ error: 'ID должен быть числом' });

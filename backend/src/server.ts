@@ -13,6 +13,8 @@ import categoriesRouter from './routes/categories.js'
 import serviceRouter from './routes/services.js';
 import serviceImagesRouter from './routes/serviceImages.js';
 import { startReminderCron } from './jobs/reminderCron.js';
+import { startAppointmentCleanupCron } from './jobs/appointmentCleanupCron.js';
+import { getExpiredAppointmentsCount } from './services/appointmentService.js';
 
 (async () => {
   try {
@@ -66,16 +68,22 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.set('trust proxy', 1);
 
+const sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret) {
+  throw new Error('SESSION_SECRET is not configured');
+}
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'fallback-secret-for-dev',
+    name: 'regina_admin_sid',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       sameSite: 'lax',
-      maxAge: 1000 * 60 * 60, // 1 час
+      maxAge: 1000 * 60 * 60,
     },
   })
 );
@@ -111,5 +119,10 @@ console.log('✅ Routers connected: appointments, notes, portfolio, files');
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log('✅ PostgreSQL pool ready');
+
+  const expiredCount = await getExpiredAppointmentsCount(90);
+  console.log(`🧹 Записей старше 90 дней: ${expiredCount}`);
+  
   startReminderCron();
+  startAppointmentCleanupCron();
 });

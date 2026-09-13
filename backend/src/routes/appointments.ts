@@ -8,7 +8,8 @@ import {
   updateAppointment,
   deleteAppointment,
 } from '../services/appointmentService';
-import { sendTelegramMessage } from '../services/telegramService';
+// import { sendTelegramMessage } from '../services/telegramService';
+// import { sendSms } from '../services/smsService';
 import { Appointment } from '../models/types/Apointments';
 import { requireAuth } from '../middleware/authMiddleware';
 
@@ -179,23 +180,28 @@ router.post('/', requireAuth, async (req, res) => {
       timeZone: 'Europe/Moscow',
     });
 
-    const clientInfo = appointment.client_name
-      ? `👤 ${appointment.client_name}`
-      : '👤 Клиент не указан';
+    // const smsText = `Новая запись! ${timeStr} — ${appointment.service}` +
+    //   (appointment.client_name ? ` (${appointment.client_name})` : '');
 
-    const priceInfo = appointment.price
-      ? `💰 ${Number(appointment.price).toLocaleString('ru-RU')} ₽`
-      : '';
+    // const clientInfo = appointment.client_name
+    //   ? `👤 ${appointment.client_name}`
+    //   : '👤 Клиент не указан';
 
-    const message =
-      `📅 <b>Новая запись!</b>\n\n` +
-      `🕐 ${timeStr}\n` +
-      `💆 ${appointment.service}\n` +
-      `${clientInfo}\n` +
-      (priceInfo ? `${priceInfo}\n` : '');
+    // const priceInfo = appointment.price
+    //   ? `💰 ${Number(appointment.price).toLocaleString('ru-RU')} ₽`
+    //   : '';
 
-    await sendTelegramMessage(message);
+    // const message =
+    //   `📅 <b>Новая запись!</b>\n\n` +
+    //   `🕐 ${timeStr}\n` +
+    //   `💆 ${appointment.service}\n` +
+    //   `${clientInfo}\n` +
+    //   (priceInfo ? `${priceInfo}\n` : '');
+
+    // await sendTelegramMessage(message);
     
+    // await sendSms(smsText);
+
     res.json(appointment);
   } catch (err) {
     console.error('Ошибка создания записи: ', err);

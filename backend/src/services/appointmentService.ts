@@ -116,3 +116,32 @@ export const deleteAppointment = async (id: number): Promise<boolean> => {
   const result = await db.query('DELETE FROM appointments WHERE id = $1', [id]);
   return (result.rowCount || 0) > 0;
 };
+
+export const deleteExpiredAppointments = async (
+  retentionDays = 90
+): Promise<number> => {
+  const result = await db.query(
+    `
+      DELETE FROM appointments
+      WHERE appointment_time < NOW() - ($1 * INTERVAL '1 day')
+    `,
+    [retentionDays]
+  );
+
+  return result.rowCount ?? 0;
+};
+
+export const getExpiredAppointmentsCount = async (
+  retentionDays = 90
+): Promise<number> => {
+  const result = await db.query(
+    `
+      SELECT COUNT(*)::int AS count
+      FROM appointments
+      WHERE appointment_time < NOW() - ($1 * INTERVAL '1 day')
+    `,
+    [retentionDays]
+  );
+
+  return result.rows[0].count;
+};

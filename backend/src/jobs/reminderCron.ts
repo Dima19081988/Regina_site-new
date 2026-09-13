@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 import { db } from '../config/db';
-import { sendTelegramMessage } from '../services/telegramService';
+// import { sendTelegramMessage } from '../services/telegramService';
+import { sendSms } from '../services/smsService';
 
 
 export const startReminderCron = () => {
@@ -20,7 +21,7 @@ export const startReminderCron = () => {
         console.log('Tomorrow appointments found:', result.rows.length);
 
         if (result.rows.length === 0) {
-            await sendTelegramMessage('📅 Завтра записей нет.');
+            console.log('Завтра записей нет — SMS не отправляем');
             return;
         }
 
@@ -30,28 +31,29 @@ export const startReminderCron = () => {
             month: 'long',
         });
 
-        const timeFormatter = new Intl.DateTimeFormat('ru-RU', {
-            timeZone: 'Europe/Moscow',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
+        // const timeFormatter = new Intl.DateTimeFormat('ru-RU', {
+        //     timeZone: 'Europe/Moscow',
+        //     hour: '2-digit',
+        //     minute: '2-digit',
+        // });
 
         const firstDate = dateFormatter.format(
             new Date(result.rows[0].appointment_time)
         );
 
-        let message = `🔔 <b>Завтра ${firstDate}</b>\n`;
-        message += `📋 Всего записей: ${result.rows.length}\n\n`;
+        // let message = `🔔 <b>Завтра ${firstDate}</b>\n`;
+        // message += `📋 Всего записей: ${result.rows.length}\n\n`;
 
-        result.rows.forEach((a, index) => {
-            const time = timeFormatter.format(new Date(a.appointment_time));
-            message += `${index + 1}. 🕐 ${time} — ${a.service}`;
-            if (a.client_name) message += `\n    👤 ${a.client_name}`;
-            if (a.price) message += `\n    💰 ${Number(a.price).toLocaleString('ru-RU')} ₽`;
-            message += '\n\n';
-        });
+        // result.rows.forEach((a, index) => {
+        //     const time = timeFormatter.format(new Date(a.appointment_time));
+        //     message += `${index + 1}. 🕐 ${time} — ${a.service}`;
+        //     if (a.client_name) message += `\n    👤 ${a.client_name}`;
+        //     if (a.price) message += `\n    💰 ${Number(a.price).toLocaleString('ru-RU')} ₽`;
+        //     message += '\n\n';
+        // });
 
-        await sendTelegramMessage(message);
+        const message = `Завтра ${firstDate} записей: ${result.rows.length}`;
+        await sendSms(message);
 
         } catch (error) {
             console.error('Cron error:', error);
