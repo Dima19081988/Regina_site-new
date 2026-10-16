@@ -107,6 +107,11 @@ export default function AdminHomepage() {
               Сертификаты
             </Link>
           </li>
+          <li>
+            <Link to="/admin/treatment-plan" className={styles['nav-link']}>
+              План лечения
+            </Link>
+          </li>
         </ul>
       </nav>
       <div className={styles.stats}>

@@ -1,0 +1,85 @@
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+
+  body:has(#treatment-plan-document)
+    > :not(:has(#treatment-plan-document)):not(#treatment-plan-document),
+  body:has(#treatment-plan-document)
+    *:has(#treatment-plan-document)
+    > :not(:has(#treatment-plan-document)):not(#treatment-plan-document) {
+    display: none !important;
+  }
+
+  html:has(#treatment-plan-document),
+  body:has(#treatment-plan-document),
+  body:has(#treatment-plan-document) *:has(#treatment-plan-document) {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  #treatment-plan-document {
+    box-sizing: border-box;
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 10mm;
+    border: 1px solid #b99880;
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.5;
+    box-shadow: none;
+
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #treatment-plan-document header {
+    break-inside: avoid;
+    margin-bottom: 6mm;
+  }
+
+  #treatment-plan-document h2 {
+    font-size: 18pt;
+  }
+
+  #treatment-plan-document h3 {
+    font-size: 12pt;
+    break-after: avoid;
+  }
+
+  #treatment-plan-document li {
+    break-inside: avoid;
+    margin-top: 5mm;
+    margin-bottom: 5mm;
+  }
+
+  #treatment-plan-document p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  #treatment-plan-document footer {
+    break-inside: avoid;
+    font-size: 9pt;
+  }
+}

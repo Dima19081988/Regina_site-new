@@ -15,7 +15,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         </Link>
         <nav className={styles.nav}>
           <Link to="/promotions" className={styles.navLink}>
-            !!!Акции!!!
+            Акции
           </Link>
           <Link to="/about" className={styles.navLink}>
             О себе
@@ -29,9 +29,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
           <Link to="/pricelist" className={styles.navLink}>
             Прайслист
           </Link>
-          <a href="/contacts" className={styles.navLink}>
+          <Link to="/contacts" className={styles.navLink}>
             Контакты
-          </a>
+          </Link>
           <Link to="/admin/login" className={styles.adminLink}>
             Вход для врача
           </Link>

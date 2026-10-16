@@ -22,7 +22,9 @@ import PortfolioEditPageAdmin from './pages/Portfolio/admin/PortfolioEditPageAdm
 import AppointmentsPageAdmin from './pages/Appointments/admin/AppointmentsPageAdmin';
 import AdminNotesPage from './pages/Notes/AdminNotesPage';
 import AdminFilesPage from './pages/Files/AdminFilesPage';
+import AdminTreatmentPlanPage from './pages/TreatmentPlan/AdminTreatmentPlanPage';
 import ProtectedRoute from './components/ProtectedRoute';
+
 
 const AdminCertificatesPage = lazy(
   () => import('./pages/Certificates/AdminCertificatesPage')
@@ -197,6 +199,14 @@ function App() {
             }
           />
         </Route>
+        <Route
+          path="/admin/treatment-plan"
+          element={
+            <AdminLayout title="План процедур">
+              <AdminTreatmentPlanPage />
+            </AdminLayout>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
